@@ -1,0 +1,178 @@
+/* General styles */
+body {
+    font-family: 'Andale Mono', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff1d7;
+}
+
+h1, h2 {
+    margin: 0;
+    color : #0061A0;
+}
+p {
+    margin: 0;
+    font-size: 18px;
+    color: black;
+
+}
+.rating img {
+    width: 20px;
+    height: 20px;
+}
+.form-container {
+        border: 3px solid #0061A0; /* Couleur de la bordure */
+        border-radius: 10px; /* Coins arrondis */
+        padding: 20px; /* Espace intérieur */
+        margin-top: 20px; /* Espace au-dessus */
+        display: none; /* Par défaut caché */
+
+
+
+}
+/* Réduire la taille de l'image et la rendre circulaire */
+.small-avatar {
+    width: 50px;        /* Largeur de l'image */
+    height: 50px;       /* Hauteur de l'image */
+    border-radius: 50%; /* Pour la rendre circulaire */
+    object-fit: cover;  /* Pour bien ajuster l'image à l'espace disponible */
+    border: 1px solid #ddd; /* Optionnel : Ajouter une légère bordure */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Optionnel : Ajouter une ombre légère */
+}
+
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 15px 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo img {
+    width: 60px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+.nav-links .post-btn {
+    background-color: #0061A0;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Profile section */
+.profile-container {
+    text-align: center;
+    margin: 50px auto;
+    background-color: white;
+    padding: 40px;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-info img.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.profile-info h2 {
+    font-size: 24px;
+    margin: 15px 0;
+}
+
+.profile-info p {
+    font-size: 18px;
+    color: black;
+}
+
+.update-profile h3 {
+    margin: 40px 0 20px;
+    font-size: 20px;
+    color: #333;
+}
+
+.update-profile form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.update-profile form button {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.update-profile form button:hover {
+    background-color: #0056b3;
+}
+
+/* Stars for ratings */
+.stars {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.star {
+    color: #FFD700;
+    font-size: 24px;
+}
+
+.star.grey {
+    color: #ccc;
+}
+
+/* Bio section */
+.bio-container {
+    margin-top: 20px;
+}
+
+.bio-container h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.bio-container p {
+    font-size: 16px;
+    color: #666;
+}
+
+
