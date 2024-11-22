@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil utilisateur</title>
+    <link rel="stylesheet" href="styleprofil.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">
+        <img src="images/logo.png" alt="TAT Logo">
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#" class="post-btn">Poster</a></li>
+        <img src="image.php?idUser=<?php echo $userId; ?>" alt="Photo de profil" />
+        <li><a href="login.html">Déconnexion</a></li>
+    </ul>
+</nav>
+
+<!-- Profil Container -->
+<div class="profile-container">
+    <div class="profile-info">
+        <img src="<?php echo $user['profile_pic']; ?>" alt="Avatar" class="avatar">
+        <h2><?php echo htmlspecialchars($user['prenom']) . " " . htmlspecialchars($user['nom']); ?></h2>
+        <?php echo htmlspecialchars($user['email']); ?>
+    </div>
+
+    <!-- Notes (par exemple pour l'élève et tuteur) -->
+    <div class="notes">
+        <p>Note élève :
+            <?php for ($i = 0; $i < 5; $i++) {
+                echo $i < $user['note_eleve'] ? '<span class="star">&#9733;</span>' : '<span class="star">&#9734;</span>';
+            } ?>
+        </p>
+        <p>Note tuteur :
+            <?php for ($i = 0; $i < 5; $i++) {
+                echo $i < $user['note_tuteur'] ? '<span class="star">&#9733;</span>' : '<span class="star">&#9734;</span>';
+            } ?>
+        </p>
+    </div>
+
+    <!-- Bio -->
+    <div class="bio-container">
+        <h4>Bio</h4>
+        <p><?php echo htmlspecialchars($user['bio']); ?></p>
+    </div>
+
+    <!-- Formulaire de mise à jour -->
+    <div class="update-profile">
+        <h3>Mettre à jour vos informations</h3>
+        <form action="update_profile.php" method="POST" enctype="multipart/form-data">
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($user['nom']); ?>">
+
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($user['prenom']); ?>">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio"><?php echo htmlspecialchars($user['bio']); ?></textarea>
+
+            <label for="profile_pic">Photo de profil:</label>
+            <input type="file" id="profile_pic" name="profile_pic">
+
+            <button type="submit">Mettre à jour</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

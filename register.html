@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tête à Tête - Inscription</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-container"> <!-- Conteneur principal pour centrer tout le contenu -->
+        
+        <!-- Conteneur du logo, titre et devise -->
+        <div class="header-container">
+            <img src="images/logo.png" alt="Logo Tête à Tête" class="logo">
+            <h1>Tête à Tête</h1>
+            <p>L'application d'entraides</p>
+        </div>
+
+        <!-- Conteneur du formulaire (cadre blanc) -->
+        <div class="login-container">
+            <div class="form-container">
+                <form action="register.php" method="POST"> <!-- Changer l'action pour register.php -->
+                    <input type="text" placeholder="Nom" id="nom" name="nom" required>
+                    <input type="text" placeholder="Prénom" id="prenom" name="prenom" required>
+                    <input type="email" placeholder="Mail" id="email" name="email" required>
+                    <input type="password" placeholder="Mot de passe" id="password" name="password" required>
+
+                    <label for="classe">Classe :</label>
+                    <select id="classe" name="classe" required>
+                        <option value="" disabled selected>Choisissez votre classe</option>
+                        <option value="I1">I1</option>
+                        <option value="B1">B1</option>
+                        <option value="P1">P1</option>
+                        <option value="I2">I2</option>
+                        <option value="B2">B2</option>
+                        <option value="P2">P2</option>
+                        <option value="A1">A1</option>
+                        <option value="B3">B3</option>
+                        <option value="A2">A2</option>
+                        <option value="A3">A3</option>
+                    </select>
+                    
+                    <button type="submit">S'inscrire</button>
+                    <div class="links">
+                        <a href="login.html">Déjà inscrit ? Se connecter</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
