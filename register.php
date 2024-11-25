@@ -1,6 +1,6 @@
 <?php
 // Connexion à la base de données
-$host = '127.0.0.1';
+$host = 'localhost';
 $db = 'BDD_TAT'; // Assurez-vous que ce nom correspond exactement au nom de la base de données
 $user = 'root'; // Utilisateur par défaut dans XAMPP
 $pass = ''; // Par défaut dans XAMPP, le mot de passe est vide
