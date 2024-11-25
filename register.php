@@ -40,5 +40,5 @@ $stmt = $pdo->prepare("INSERT INTO `User` (Nom, Prenom, Mail, Mot_de_passe, Clas
 $stmt->execute([$nom, $prenom, $email, $password, $classe]);
 
 echo "Inscription réussie !";
-header("Location: index.html");
+header("Location: login.html");
 exit();
