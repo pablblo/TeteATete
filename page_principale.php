@@ -19,29 +19,39 @@ $query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
 $query->execute([$user_id]);
 $user = $query->fetch(PDO::FETCH_ASSOC);
 
-// Mise à jour des informations si le formulaire est soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $bio = $_POST['bio'];
-    $photo = null;
+// Création de cours si le formulaire est soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_course'])) {
+    $courseTitle = $_POST['course_title'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
+    $participants = $_POST['participants'];
+    $role = $_POST['role']; // "eleve" ou "instructeur"
 
-    // Si une nouvelle photo de profil est téléchargée
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-        $photo = file_get_contents($_FILES['photo']['tmp_name']);
+    // Insérer dans la table Cours
+    $stmt = $db->prepare("
+        INSERT INTO Cours (Titre, Date, Heure, Taille, Places_restants_Tuteur, Places_restants_Eleve)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+
+    if ($role === 'instructeur') {
+        $stmt->execute([$courseTitle, $date, $time, $participants, 1, $participants]);
+    } else {
+        $stmt->execute([$courseTitle, $date, $time, $participants, $participants, 1]);
     }
 
-    // Mettre à jour les informations dans la base de données
-    $update_query = $db->prepare("
-        UPDATE User
-        SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = IFNULL(?, Photo_de_Profil)
-        WHERE idUser = ?
-    ");
-    $update_query->execute([$nom, $prenom, $email, $bio, $photo, $user_id]);
+    // Récupérer l'ID du cours créé
+    $idCours = $db->lastInsertId();
 
-    // Recharger la page pour voir les nouvelles informations
-    header("Location: profil.php");
+    // Insérer dans la table User_Cours
+    $stmt = $db->prepare("
+        INSERT INTO User_Cours (Tuteur_ou_Eleve, idUser, idCours)
+        VALUES (?, ?, ?)
+    ");
+    $roleValue = ($role === 'instructeur') ? 1 : 0; // 1 = Tuteur, 0 = Élève
+    $stmt->execute([$roleValue, $user_id, $idCours]);
+
+    // Redirection après la création du cours
+    header("Location: profil.php?success=course_created");
     exit();
 }
 ?>
@@ -52,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tête à Tête - Accueil</title>
-    <link rel="stylesheet" href="styleprofil.css">
+    <link rel="stylesheet" href="style/styleprofil.css">
 </head>
 <body>
     
@@ -74,15 +84,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </ul>
 </nav>
 
-    <!-- Section de recherche et filtres -->
-    <section class="search-section">
-        <input type="text" placeholder="Recherche" class="search-bar">
-        <button class="filter-btn">Filtre</button>
-    </section>
+<!-- Section de recherche et filtres -->
+<section class="search-section">
+    <input type="text" placeholder="Recherche" class="search-bar">
+    <button class="filter-btn">Filtre</button>
+</section>
 
-    <!-- Bouton pour poster une annonce -->
-    <div class="post-announcement">
-        <button class="post-announcement-btn">Poster une annonce <span>✏️</span></button>
-    </div>
+<!-- Section de création de cours -->
+<section class="create-course-section">
+    <h2>Créer un nouveau cours</h2>
+    <form method="POST" action="">
+        <!-- Date et heure -->
+        <div class="date-time">
+            <div>
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div>
+                <label for="time">Heure</label>
+                <input type="time" id="time" name="time" required>
+            </div>
+        </div>
+        
+        <!-- Titre du cours -->
+        <label for="course_title">Titre du cours</label>
+        <input type="text" id="course_title" name="course_title" placeholder="Titre du cours" required>
+
+        <!-- Nombre de participants -->
+        <label for="participants">Nombre de participants</label>
+        <select id="participants" name="participants" required>
+            <option value="">Sélectionnez</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6+">6 ou plus</option>
+        </select>
+
+        <!-- Rôle -->
+        <label>Rôle</label>
+        <div>
+            <label class="role-btn">
+                <input type="radio" name="role" value="eleve" required> Élève
+            </label>
+            <label class="role-btn">
+                <input type="radio" name="role" value="instructeur" required> Instructeur
+            </label>
+        </div>
+
+        <!-- Bouton de création -->
+        <button type="submit" name="create_course">Créer le cours</button>
+    </form>
+</section>
+
 </body>
 </html>
