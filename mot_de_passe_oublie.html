@@ -33,14 +33,13 @@
     <div class="overlay" id="overlay" style="display:none;" onclick="closeModal()"></div>
 
     <!-- Boîte modale pour la réinitialisation du mot de passe -->
-    <div class="modal-container" id="resetModal" style="display:none;">
+    <div class="modal-container" id="resetModal" style="display:initial;">
         <div class="modal">
             <h2>Réinitialiser le mot de passe</h2>
             <form action="reset_password.php" method="POST"> <!-- Script PHP à créer -->
                 <input type="email" placeholder="Votre email" name="email" required>
                 <button type="submit">Réinitialiser le mot de passe</button>
-                <button type="button" onclick="closeModal()">Retour</button>
-            </form>
+                <button type="button" onclick="location.href='login.html'">Retour</button>            </form>
         </div>
     </div>
 
