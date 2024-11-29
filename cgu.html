@@ -3,14 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conditions Générales d'Utilisation</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Profil de l'utilisateur</title>
+    <link rel="stylesheet" href="styleFAQ.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Conditions Générales d'Utilisation</h1>
-        <p>Vous pouvez consulter les Conditions Générales d'Utilisation ci-dessous :</p>
-        <iframe src="documents/CGU.pdf" width="100%" height="600px"></iframe>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="page_principale.php">
+            <img src="images/logo.png" style="height: 100px; width: 100px;" alt="TAT Logo">
+        </a>
     </div>
+    <ul class="nav-links">
+        <li><a href="contact.php">Contact</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="cgu.html">CGU</a></li>
+        <li><a href="#" class="post-btn">Poster</a></li>
+        <li><a href="profil.php" class="user-profile">
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
+            style="object-fit: cover; height: 50px; width: 50px !important;border: 1px solid #ddd; border-radius: 50%;"
+            alt="Photo de profil"></a>
+        </li>
+        <li><a href="login.html">Déconnexion</a></li>
+    </ul>
+</nav>
+
+<div class="profile-container">
+
+    <!-- Section Qui sommes-nous -->
+    <section>
+        <div>
+            <iframe src="documents/CGU.pdf" width="100%" height="600px" style="border: none;"></iframe>
+        </div>
+    </section>
+</div>
+
 </body>
 </html>
