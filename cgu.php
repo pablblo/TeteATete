@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de l'utilisateur</title>
-    <link rel="stylesheet" href="styleprofil.css">
+    <link rel="stylesheet" href="styleFAQ.css">
 </head>
 <body>
 
@@ -64,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </a>
     </div>
     <ul class="nav-links">
-        <li><a href="#">Contact</a></li>
+        <li><a href="contact.php">Contact</a></li>
         <li><a href="FAQ.PHP">FAQ</a></li>
-        <li><a href="cgu.php">CGU</a></li>
+        <li><a href="#">CGU</a></li>
         <li><a href="#" class="post-btn">Poster</a></li>
         <li><a href="profil.php" class="user-profile">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
@@ -76,19 +76,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="login.html">Déconnexion</a></li>
     </ul>
 </nav>
-
-<div class="profile-container">
-<div class="form-container" id="edit-form">
-        <form action="contact.php?id=<?php echo $message_id; ?>" method="POST" enctype="multipart/form-data">
-            <label for="mail">Mail :</label>
-            <input type="text" name="mail" value="<?php echo htmlspecialchars($Message_Contact['Mail']); ?>" required>
-
-            <label for="message">Message :</label>
-            <textarea name="message" required><?php echo htmlspecialchars($Message_Contact['message']); ?></textarea><br><br>
-
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
+<div class="profile-container"  style="border: 2px solid #0061A0;">
+    <section>
+        <div>
+            <h1> Condition générales d'utilisation</h1>
+        </div>
+    </section>
+</div>
+<div class="profile-container"  style="border: 2px solid #0061A0;">
+    <section>
+        <div>
+            <iframe src="documents/CGU.pdf" width="100%" height="600px"></iframe>
+        </div>
+    </section>
 </div>
 
 </body>
