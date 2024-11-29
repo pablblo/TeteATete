@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_course'])) {
     <ul class="nav-links">
         <li><a href="#">Contact</a></li>
         <li><a href="FAQ.php">FAQ</a></li>
+        <li><a href="cgu.html">CGU</a></li>
         <li><a href="#" class="post-btn">Poster</a></li>
         <li><a href="profil.php" class="user-profile"> <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>" style="object-fit: cover; height: 50px; width: 50px !important;border: 1px solid #ddd; border-radius: 50%;" alt="Photo de profil"></a></li>
 
