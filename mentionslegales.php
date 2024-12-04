@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <ul class="nav-links">
         <li><a href="contact.php">Contact</a></li>
-        <li><a href="FAQ.PHP">FAQ</a></li>
-        <li><a href="#">CGU</a></li>
-        <li><a href="mentionslegales.php">Mentions Légales</a></li>
+        <li><a href="FAQ.php">FAQ</a></li>
+        <li><a href="cgu.php">CGU</a></li>
+        <li><a href="#">Mentions Légales</a></li>
         <li><a href="#" class="post-btn">Poster</a></li>
         <li><a href="profil.php" class="user-profile">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="profile-container"  style="border: 2px solid #0061A0;">
     <section>
         <div>
-            <h1> Condition générales d'utilisation</h1>
+            <h1>Mentions Légales</h1>
         </div>
     </section>
 </div>

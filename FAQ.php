@@ -80,6 +80,7 @@ $etoilesJaunes = round($moyenne);  // Étoiles jaunes selon la moyenne
         <li><a href="contact.php">Contact</a></li>
         <li><a href="#">FAQ</a></li>
         <li><a href="cgu.php">CGU</a></li>
+        <li><a href="mentionslegales.php">Mentions Légales</a></li>
         <li><a href="#" class="post-btn">Poster</a></li>
         <li><a href="profil.php" class="user-profile">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
