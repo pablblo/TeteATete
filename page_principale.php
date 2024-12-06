@@ -149,6 +149,8 @@ $courses = $db->query("SELECT * FROM Cours ORDER BY Date, Heure")->fetchAll(PDO:
     <ul class="nav-links">
         <li><a href="#">Contact</a></li>
         <li><a href="FAQ.php">FAQ</a></li>
+        <li><a href="cgu.php">CGU</a></li>
+        <li><a href="mentionslegales.php">Mentions Légales</a></li>
         <li><a href="page_principale.php">Cours</a></li>
         <li><a href="profil.php" class="user-profile">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
