@@ -2,6 +2,9 @@
 // Inclusion du fichier de connexion à la base de données
 require 'db_connection.php';
 
+// Inclusion de la barre de navigation
+include 'navbar.php';
+
 // Démarrer la session pour l'utilisateur
 session_start();
 
@@ -56,27 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar">
-    <div class="logo">
-        <a href="page_principale.php">
-            <img src="images/logo.png" style="height: 100px; width: 100px;" alt="TAT Logo">
-        </a>
-    </div>
-    <ul class="nav-links">
-        <li><a href="contact.php">Contact</a></li>
-        <li><a href="FAQ.php">FAQ</a></li>
-        <li><a href="cgu.php">CGU</a></li>
-        <li><a href="#">Mentions Légales</a></li>
-        <li><a href="#" class="post-btn">Poster</a></li>
-        <li><a href="profil.php" class="user-profile">
-            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
-            style="object-fit: cover; height: 50px; width: 50px !important;border: 1px solid #ddd; border-radius: 50%;"
-            alt="Photo de profil"></a>
-        </li>
-        <li><a href="login.html">Déconnexion</a></li>
-    </ul>
-</nav>
 <div class="profile-container"  style="border: 2px solid #0061A0;">
     <section>
         <div>
