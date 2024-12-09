@@ -42,3 +42,5 @@ $stmt->execute([$nom, $prenom, $email, $password, $classe]);
 echo "Inscription réussie !";
 header("Location: login.html");
 exit();
+
+?>

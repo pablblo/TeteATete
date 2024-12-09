@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update_query->execute([$mail, $message, $message_id]);
 
     // Recharger la page pour voir les nouvelles informations
-    header("Location: contact.php");
+    header("Location: cgu.php");
     exit();
 }
 ?>
