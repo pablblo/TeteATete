@@ -5,6 +5,7 @@ require 'db_connection.php';
 // Inclusion de la barre de navigation
 include 'navbar.php';
 
+//
 // Démarrer la session pour l'utilisateur
 session_start();
 
