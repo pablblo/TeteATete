@@ -5,8 +5,10 @@ require 'db_connection.php';
 // Inclusion de la barre de navigation
 include 'navbar.php';
 
-// Démarrer la session pour l'utilisateur
-session_start();
+// Démarrer la session pour l'utilisateur si elle n'est pas déjà démarrée
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {
