@@ -36,12 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Port = 587;  // Port SMTP pour TLS
 
             // Expéditeur et destinataire
-            $mail->setFrom('teteatete.innowave@gmail.com', 'Nom de l\'expéditeur');
+            $mail->setFrom('teteatete.innowave@gmail.com', 'Tête à Tête');  // L'expéditeur
             $mail->addAddress($email);  // Le destinataire (utilisateur qui demande la réinitialisation)
 
             // Contenu de l'e-mail
             $mail->isHTML(true);  // Format HTML
-            $mail->Subject = 'Réinitialisation de votre mot de passe';
+            $mail->Subject = 'Reinitialisation de votre mot de passe';
             $mail->Body    = "Cliquez sur ce lien pour réinitialiser votre mot de passe : <a href='http://localhost/TeteATete/changer_mot_de_passe.php?token=" . $token . "'>Réinitialiser le mot de passe</a>";
             $mail->AltBody = 'Cliquez sur ce lien pour réinitialiser votre mot de passe : http://localhost/TeteATete/changer_mot_de_passe.php?token=' . $token;
 
