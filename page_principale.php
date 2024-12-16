@@ -5,8 +5,10 @@ require 'db_connection.php';
 // Inclusion de la barre de navigation
 include 'navbar.php';
 
-// Démarrer la session pour l'utilisateur
-session_start();
+// Démarrer la session pour l'utilisateur si elle n'est pas déjà démarrée
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {
@@ -135,6 +137,7 @@ $courses = $db->query("SELECT * FROM Cours ORDER BY Date, Heure")->fetchAll(PDO:
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tête à Tête - Accueil</title>

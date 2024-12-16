@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tête à Tête - Connexion</title>
@@ -75,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" placeholder="Mot de passe" id="password" name="password" required>
                     <button type="submit">Se Connecter</button>
                     <div class="links">
-                        <a href="mot_de_passe_oublie.html">Mot de passe oublié</a>
+                        <a href="reset_password.php">Mot de passe oublié</a>
                         <p></p>
                         <a href="register.html">Inscription</a>
                     </div>
