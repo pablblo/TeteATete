@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $update_query->execute([$mail, $message, $message_id]);
 
     // Recharger la page pour voir les nouvelles informations
-    header("Location: contact.php");
+    header("Location: mentionslegales.php");
     exit();
 }
 ?>
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="profile-container"  style="border: 2px solid #0061A0;">
     <section>
         <div>
-            <iframe src="documents/CGU.pdf" width="100%" height="600px"></iframe>
+            <iframe src="documents/MLTAT.pdf" width="100%" height="600px"></iframe>
         </div>
     </section>
 </div>
