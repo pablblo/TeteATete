@@ -48,6 +48,21 @@
             </div>
         </div>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("form-container");
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const userConfirmation = confirm("Confirmez-vous votre inscription?");
+                    if (userConfirmation) {
+                        form.submit();
+                    } else {
+                        alert("Inscription annulée.");
+                    }
+                });
+            });
+        </script>
+
     </div>
 </body>
 </html>
