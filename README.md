@@ -11,4 +11,6 @@ Il s'agit d'un projet de site web simple construit à l'aide de HTML, CSS et Jav
 ## Technologies utilisées
 - HTML5
 - CSS
+- PHP
 - JavaScript
+- SQL
