@@ -2,15 +2,12 @@
 // Inclusion du fichier de connexion à la base de données
 require 'db_connection.php';
 
-// Inclusion de la barre de navigation
-include 'navbar.php';
-
 // Démarrer la session pour l'utilisateur
 session_start();
 
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Rediriger vers la page de login si l'utilisateur n'est pas connecté
+    header("Location: login.php");
     exit();
 }
 
@@ -22,58 +19,210 @@ $query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
 $query->execute([$user_id]);
 $user = $query->fetch(PDO::FETCH_ASSOC);
 
-// Mise à jour des informations si le formulaire est soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $bio = $_POST['bio'];
-    $photo = null;
+// Vérifier si l'utilisateur est un administrateur
+$isAdmin = $user['Admin'] == 1;
 
-    // Si une nouvelle photo de profil est téléchargée
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-        $photo = file_get_contents($_FILES['photo']['tmp_name']);
+// Gestion des réponses par les administrateurs
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'], $_POST['question_id']) && $isAdmin) {
+    $answer = trim($_POST['answer']);
+    $question_id = (int)$_POST['question_id'];
+
+    if (!empty($answer)) {
+        $stmt = $db->prepare("UPDATE Forum SET answer = ? WHERE id = ?");
+        $stmt->execute([$answer, $question_id]);
+        header("Location: " . $_SERVER['PHP_SELF']); // Rafraîchir la page
+        exit();
     }
-
-    // Mettre à jour les informations dans la base de données
-    $update_query = $db->prepare("
-        UPDATE User
-        SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = IFNULL(?, Photo_de_Profil)
-        WHERE idUser = ?
-    ");
-    $update_query->execute([$nom, $prenom, $email, $bio, $photo, $user_id]);
-
-    // Recharger la page pour voir les nouvelles informations
-    header("Location: profil.php");
-    exit();
 }
 
-// Récupérer la moyenne des évaluations d'un utilisateur (tuteur ou élève)
-$queryMoyenne = $db->prepare("
-    SELECT AVG(Note) as moyenne
-    FROM Evaluation
-    WHERE idUserReceveur = ?
-");
-$queryMoyenne->execute([$user_id]);
-$moyenne = $queryMoyenne->fetch(PDO::FETCH_ASSOC)['moyenne'] ?? 0;
+// Gestion des questions
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
+    $question = trim($_POST['question']);
+    if (!empty($question)) {
+        $stmt = $db->prepare("INSERT INTO Forum (user_id, question) VALUES (?, ?)");
+        $stmt->execute([$user_id, $question]);
+        header("Location: " . $_SERVER['PHP_SELF']); // Rafraîchir la page
+        exit();
+    }
+}
 
-// Afficher les étoiles (5 étoiles grises par défaut, jaunes selon la moyenne)
-$etoilesGrises = 5 - round($moyenne);  // Calculer combien d'étoiles grises afficher
-$etoilesJaunes = round($moyenne);  // Étoiles jaunes selon la moyenne
+// Récupération des questions et réponses
+$forum_stmt = $db->query("
+    SELECT f.*, u.Prenom, u.Nom 
+    FROM Forum f 
+    JOIN User u ON f.user_id = u.idUser 
+    ORDER BY f.created_at DESC
+");
+$forum_posts = $forum_stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil de l'utilisateur</title>
-    <link rel="stylesheet" href="style/styleFAQ.css">
+    <title>Page d'accueil</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Navbar */
+        .navbar .nav-link:hover {
+            color: #004f80 !important;
+        }
+        .navbar .btn-outline-primary:hover {
+            background-color: #0061A0;
+            color: white;
+        }
+
+        /* Section Qui sommes-nous */
+        .about-us {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .about-us .about-text {
+            max-width: 60%;
+        }
+        .about-us h1 {
+            font-size: 2.5rem;
+            color: #0061A0;
+            font-weight: bold;
+        }
+        .about-us h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .about-us p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .about-us img {
+            max-width: 30%;
+            border-radius: 10px;
+
+            border-radius: 50%; /* Rendre l'image circulaire */
+            object-fit: cover; /* Assurer que l'image s'ajuste correctement */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        
+        }
+
+        /* Section FAQ */
+        .faq {
+            padding: 40px 20px;
+        }
+        .faq h2 {
+            font-size: 2.5rem;
+            color: #0061A0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .faq-item {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .faq-item h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .faq-item h4 {
+            font-size: 1.2rem;
+            color: #0061A0;
+            margin-bottom: 5px;
+        }
+        .faq-item p {
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-us {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about-us .about-text {
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            .about-us img {
+                max-width: 80%;
+                margin: 0 auto;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="page_principale.php">
+            <img src="images/logo.png" alt="TAT Logo" style="height: 100px; width: 100px;" class="me-2">
+            <span style="font-size: 20px; font-weight: bold; color: #0061A0;"></span>
+        </a>
+        <!-- Toggler for mobile view -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-dark fw-semibold" href="#">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
+                </li>
+                <!-- Section de recherche -->
+                <form class="d-flex ms-3" action="search_profiles.php" method="GET">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
+                    <button class="btn btn-outline-primary" type="submit">Rechercher</button>
+                </form>
+                <!-- Profil utilisateur connecté -->
+                
+                <li class="nav-item ms-3 d-flex align-items-center">
+                    <a class="nav-link d-flex align-items-center" href="profil.php">
+                        <?php 
+                        if (!empty($user['Photo_de_Profil'])) {
+                        // Utiliser la photo de profil si elle existe
+                            $image_src = 'data:image/jpeg;base64,' . base64_encode($user['Photo_de_Profil']);
+                        } else {
+                        // Image par défaut si la photo n'existe pas
+                            $image_src = 'images/default_profile.png'; // Chemin vers votre image par défaut
+                        }
+                        ?>
+                        <img src="<?php echo $image_src; ?>"
+                             alt="Profil"
+                             class="rounded-circle"
+                             style="object-fit: cover; height: 40px; width: 40px; border: 2px solid #ddd;">
+                    </a>
+                </li>
 
-<div class="profile-container">
+                <li class="nav-item ms-3">
+                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
     <!-- Section Qui sommes-nous -->
     <section class="about-us">
@@ -81,61 +230,113 @@ $etoilesJaunes = round($moyenne);  // Étoiles jaunes selon la moyenne
             <h1>Qui sommes-nous ?</h1>
             <h2>InnoWave</h2>
             <p>
-                Cette plateforme a pour objectif de faciliter l'accès à des cours en ligne et des services de tutorat. Elle permettra aux étudiants de suivre des sessions de formation supplémentaires grâce à la mise en relation d’un tuteur, de recevoir de l'aide via des tuteurs et d'organiser des séances de tutorat de manière flexible.
-                L'application s'inscrit dans une démarche de soutien pédagogique pour améliorer la performance académique des étudiants tout en favorisant l'entraide.
+                Cette plateforme facilite l'accès aux cours en ligne et aux services de tutorat. Elle permet aux étudiants de suivre des formations supplémentaires, d’obtenir de l’aide personnalisée et d’organiser des séances de tutorat flexibles. Nous visons à améliorer la performance académique des étudiants en favorisant l'entraide pédagogique.
             </p>
         </div>
-        <div class="about-image">
-            <img src="images/APPlogo.png" style="height: 250px; width: 250px;"  alt="Logo InnoWave">
-        </div>
+        <img src="images/APPlogo.png" alt="Logo InnoWave">
     </section>
 
     <!-- Section FAQ -->
     <section class="faq">
         <h2>FAQ</h2>
-
         <div class="faq-item">
-            <h3>Politique d'Annulation</h3>
-            <h4>Que se passe-t-il si je dois annuler une séance de tutorat ?</h4>
-            <p>
-                Si vous devez annuler une séance, vous pouvez le faire directement via votre espace personnel. Nous vous demandons d’annuler au moins 24 heures à l'avance pour éviter tout frais d'annulation. Si l’annulation est faite en dehors de ce délai, des frais peuvent être appliqués. Veuillez consulter notre politique d'annulation pour plus de détails.
-            </p>
-        </div>
-
-        <div class="faq-item">
-            <h3>Assistance Technique</h3>
-            <h4>Qui puis-je contacter si je rencontre un problème technique sur la plateforme ?</h4>
-            <p>
-                Si vous rencontrez un problème technique sur la plateforme, vous pouvez contacter le support technique via l'e-mail : support.client@gmail.com ou le formulaire de contact mis à disposition en haut de la page. Vous pouvez aussi consulter la section FAQ pour résoudre les problèmes courants.
-            </p>
+            <h3>Politique d'annulation</h3>
+            <h4>Que se passe-t-il si je dois annuler une séance ?</h4>
+            <p>Vous pouvez annuler une séance au moins 24 heures à l'avance via votre espace personnel. Consultez notre politique d'annulation pour les détails.</p>
         </div>
         <div class="faq-item">
-            <h3>Modification Profile</h3>
-            <h4>Puis-je changer mes informations personnelles ?</h4>
-            <p>
-                Oui, vous pouvez modifier vos informations personnelles en vous rendant dans la section "Profil" après vous être connecté. Cliquez sur "Modifier" pour mettre à jour vos données.
-
-            </p>
+            <h3>Assistance technique</h3>
+            <h4>Qui contacter en cas de problème technique ?</h4>
+            <p>Contactez le support technique à support.client@gmail.com ou utilisez le formulaire de contact.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Modification du profil</h3>
+            <h4>Comment changer mes informations personnelles ?</h4>
+            <p>Accédez à la section "Profil", cliquez sur "Modifier" pour mettre à jour vos informations.</p>
         </div>
         <div class="faq-item">
             <h3>Réservation</h3>
             <h4>Comment réserver un cours ?</h4>
-            <p>
-                Après vous être connecté, allez dans la section "Cours", sélectionnez celui qui vous intéresse, et cliquez sur "Réserver". Assurez-vous qu'il reste des places disponibles pour les tuteurs ou élèves.
-
-            </p>
+            <p>Allez dans la section "Cours", sélectionnez un cours et cliquez sur "Réserver".</p>
         </div>
         <div class="faq-item">
-            <h3>Evaluation</h3>
+            <h3>Évaluation</h3>
             <h4>Comment évaluer un tuteur ou un élève ?</h4>
-            <p>
-                Une fois le cours terminé, vous pouvez évaluer le tuteur ou l'élève en accédant à la page du cours et en laissant une note et un commentaire.
-
-            </p>
+            <p>Après la séance, accédez à la page du cours pour laisser une évaluation.</p>
         </div>
     </section>
+    <section id="forum" class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Forum de discussion</h2>
 
+        <!-- Formulaire pour poser une question -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="POST" action="">
+                    <div class="mb-3">
+                        <label for="question" class="form-label">Posez votre question :</label>
+                        <textarea id="question" name="question" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Liste des questions et réponses -->
+        
+</section>
+<div class="forum-questions">
+    <?php if (!empty($forum_posts)): ?>
+        <?php foreach ($forum_posts as $post): ?>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Question de <?php echo htmlspecialchars($post['Prenom'] . ' ' . $post['Nom']); ?> 
+                        <span class="text-muted" style="font-size: 0.8rem;">(<?php echo $post['created_at']; ?>)</span>
+                    </h5>
+                    <p class="card-text"><?php echo nl2br(htmlspecialchars($post['question'])); ?></p>
+
+                    <!-- Affichage de la réponse -->
+                    <?php if (!empty($post['answer'])): ?>
+                        <div class="mt-3 p-3 bg-light border rounded">
+                            <strong>Réponse de l'administrateur :</strong>
+                            <p><?php echo nl2br(htmlspecialchars($post['answer'])); ?></p>
+                        </div>
+                    <?php elseif ($isAdmin): ?>
+                        <!-- Formulaire de réponse pour les administrateurs -->
+                        <form method="POST" action="" class="mt-3">
+                            <input type="hidden" name="question_id" value="<?php echo $post['id']; ?>">
+                            <div class="mb-3">
+                                <textarea name="answer" class="form-control" rows="3" placeholder="Répondre à cette question..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Envoyer la réponse</button>
+                        </form>
+                    <?php else: ?>
+                        <p class="text-muted">En attente de réponse...</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-center text-muted">Aucune question pour le moment. Posez-en une ci-dessus !</p>
+    <?php endif; ?>
 </div>
 
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
+        <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
+            Conditions générales d'utilisation
+        </a>
+        |
+        <a href="mentionslegales.php" class="text-decoration-none mx-3 text-dark">
+            Mentions légales
+        </a>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 </html>

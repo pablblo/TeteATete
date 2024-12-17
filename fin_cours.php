@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Afficher le formulaire d'évaluation
 ?>
+
 <h2>Évaluer les participants</h2>
 <form action="evaluer.php?idCours=<?php echo $idCours; ?>" method="POST">
     <?php foreach ($participants as $participant): ?>

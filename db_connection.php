@@ -1,7 +1,7 @@
 <?php
 // Détails de connexion à la base de données
 $host = 'localhost'; // Adresse du serveur (localhost si c'est en local)
-$dbname = 'BDD_TAT'; // Nom de ta base de données
+$dbname = 'bdd_tat'; // Nom de ta base de données
 $username = 'root';  // Nom d'utilisateur MySQL
 $password = '';      // Mot de passe MySQL
 
