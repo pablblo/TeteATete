@@ -1,0 +1,1 @@
+<p>Liste des fichiers : <a href="index.php?cible=fichiers&fonction=liste">lien</a></p>
