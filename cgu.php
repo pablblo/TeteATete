@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </section>
 </div>
+
 <div class="profile-container"  style="border: 2px solid #0061A0;">
     <section>
         <div>
