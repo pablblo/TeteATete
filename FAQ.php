@@ -1,7 +1,6 @@
 <?php
 // Inclusion du fichier de connexion à la base de données
 require 'db_connection.php';
-include 'navbar.php';
 
 // Démarrer la session pour l'utilisateur
 
@@ -168,7 +167,7 @@ $forum_posts = $forum_stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-    
+    <?php include 'navbar.php'; ?>
     <!-- Section Qui sommes-nous -->
     <section class="about-us">
         <div class="about-text">
