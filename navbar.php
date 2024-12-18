@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="#">Contact</a>
+                    <a class="nav-link text-dark fw-semibold" href="contact.php">Contact</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
