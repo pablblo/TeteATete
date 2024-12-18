@@ -1,27 +1,3 @@
-<?php
-
-// Inclusion du fichier de connexion à la base de données
-require 'db_connection.php';
-
-// Démarrer la session pour l'utilisateur
-//session_start();
-
-// Vérifier si l'utilisateur est connecté (sinon redirection)
-//if (!isset($_SESSION['user_id'])) {
-//    header("Location: login.php"); // Rediriger vers la page de login si l'utilisateur n'est pas connecté
-//    exit();
-//}
-
-// Récupérer l'ID de l'utilisateur connecté
-$user_id = $_SESSION['user_id'];
-
-// Récupérer les informations de l'utilisateur depuis la base de données
-$query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
-$query->execute([$user_id]);
-$user = $query->fetch(PDO::FETCH_ASSOC);
-
-?>
-
 <!-- Navbar -->
   
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
