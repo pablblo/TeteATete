@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <link rel="icon" href="images/logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contactez-nous</title>
@@ -142,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+<<<<<<< HEAD
     <div class="container">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" href="page_principale.php">
@@ -193,8 +195,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
                 </li>
             </ul>
+=======
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="page_principale.php">
+                <img src="images/logo.png" alt="TAT Logo" style="height: 100px; width: 100px;" class="me-2">
+                <span style="font-size: 20px; font-weight: bold; color: #0061A0;"></span>
+            </a>
+            <!-- Toggler for mobile view -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark fw-semibold" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
+                    </li>
+                    <!-- Section de recherche -->
+                    <form class="d-flex ms-3" action="search_profiles.php" method="GET">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
+                        <button class="btn btn-outline-primary" type="submit">Rechercher</button>
+                    </form>
+                    <!-- Profil utilisateur connecté -->
+                    <li class="nav-item ms-3 d-flex align-items-center">
+                        <a class="nav-link d-flex align-items-center" href="profil.php">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
+                                 alt="Profil"
+                                 class="rounded-circle"
+                                 style="object-fit: cover; height: 40px; width: 40px; border: 2px solid #ddd;">
+                        </a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
+                    </li>
+                </ul>
+            </div>
+>>>>>>> 72670a3664a8a28323279113bd67a25b13c910fc
         </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Contactez-nous</h2>
+
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success text-center">
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger text-center">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+            <div class="mb-3">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom" name="prenom" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Adresse email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
     </div>
+<<<<<<< HEAD
 </nav>
     
     <div class="container mt-5">
@@ -233,6 +315,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 
+=======
+
+>>>>>>> 72670a3664a8a28323279113bd67a25b13c910fc
     <!-- Bootstrap JS et dépendances -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
