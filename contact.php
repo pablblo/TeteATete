@@ -5,6 +5,8 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
 require 'db_connection.php';
+include 'navbar.php';
+
 session_start();
 
 // Vérification de connexion utilisateur
@@ -141,183 +143,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-<<<<<<< HEAD
-    <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="page_principale.php">
-            <img src="images/logo.png" alt="TAT Logo" style="height: 100px; width: 100px;" class="me-2">
-            <span style="font-size: 20px; font-weight: bold; color: #0061A0;"></span>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Contactez-nous</h2>
+
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success text-center">
+                <?php echo htmlspecialchars($success); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger text-center">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="">
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+            <div class="mb-3">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom" name="prenom" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Adresse email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3 mt-5">
+        <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
+        <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
+            Conditions générales d'utilisation
         </a>
-        <!-- Toggler for mobile view -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Navbar Links -->
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="#">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
-                </li>
-                <!-- Section de recherche -->
-                <form class="d-flex ms-3" action="search_profiles.php" method="GET">
-                    <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
-                    <button class="btn btn-outline-primary" type="submit">Rechercher</button>
-                </form>
-                <!-- Profil utilisateur connecté -->
-                
-                <li class="nav-item ms-3 d-flex align-items-center">
-                    <a class="nav-link d-flex align-items-center" href="profil.php">
-                        <?php 
-                        if (!empty($user['Photo_de_Profil'])) {
-                        // Utiliser la photo de profil si elle existe
-                            $image_src = 'data:image/jpeg;base64,' . base64_encode($user['Photo_de_Profil']);
-                        } else {
-                        // Image par défaut si la photo n'existe pas
-                            $image_src = 'images/default_profile.png'; // Chemin vers votre image par défaut
-                        }
-                        ?>
-                        <img src="<?php echo $image_src; ?>"
-                             alt="Profil"
-                             class="rounded-circle"
-                             style="object-fit: cover; height: 40px; width: 40px; border: 2px solid #ddd;">
-                    </a>
-                </li>
+        |
+        <a href="mentionslegales.php" class="text-decoration-none mx-3 text-dark">
+            Mentions légales
+        </a>
+    </footer>
 
-                <li class="nav-item ms-3">
-                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
-                </li>
-            </ul>
-=======
-        <div class="container">
-            <!-- Logo -->
-            <a class="navbar-brand d-flex align-items-center" href="page_principale.php">
-                <img src="images/logo.png" alt="TAT Logo" style="height: 100px; width: 100px;" class="me-2">
-                <span style="font-size: 20px; font-weight: bold; color: #0061A0;"></span>
-            </a>
-            <!-- Toggler for mobile view -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Navbar Links -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="#">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
-                    </li>
-                    <!-- Section de recherche -->
-                    <form class="d-flex ms-3" action="search_profiles.php" method="GET">
-                        <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
-                        <button class="btn btn-outline-primary" type="submit">Rechercher</button>
-                    </form>
-                    <!-- Profil utilisateur connecté -->
-                    <li class="nav-item ms-3 d-flex align-items-center">
-                        <a class="nav-link d-flex align-items-center" href="profil.php">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
-                                 alt="Profil"
-                                 class="rounded-circle"
-                                 style="object-fit: cover; height: 40px; width: 40px; border: 2px solid #ddd;">
-                        </a>
-                    </li>
-                    <li class="nav-item ms-3">
-                        <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
-                    </li>
-                </ul>
-            </div>
->>>>>>> 72670a3664a8a28323279113bd67a25b13c910fc
-        </div>
-    </nav>
-    
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Contactez-nous</h2>
 
-        <?php if (!empty($success)): ?>
-            <div class="alert alert-success text-center">
-                <?php echo htmlspecialchars($success); ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!empty($error)): ?>
-            <div class="alert alert-danger text-center">
-                <?php echo htmlspecialchars($error); ?>
-            </div>
-        <?php endif; ?>
-
-        <form method="POST" action="">
-            <div class="mb-3">
-                <label for="nom" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="nom" name="nom" required>
-            </div>
-            <div class="mb-3">
-                <label for="prenom" class="form-label">Prénom</label>
-                <input type="text" class="form-control" id="prenom" name="prenom" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Adresse email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        </form>
-    </div>
-<<<<<<< HEAD
-</nav>
-    
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Contactez-nous</h2>
-
-        <?php if (!empty($success)): ?>
-            <div class="alert alert-success text-center">
-                <?php echo htmlspecialchars($success); ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!empty($error)): ?>
-            <div class="alert alert-danger text-center">
-                <?php echo htmlspecialchars($error); ?>
-            </div>
-        <?php endif; ?>
-
-        <form method="POST" action="">
-            <div class="mb-3">
-                <label for="nom" class="form-label">Nom</label>
-                <input type="text" class="form-control" id="nom" name="nom" required>
-            </div>
-            <div class="mb-3">
-                <label for="prenom" class="form-label">Prénom</label>
-                <input type="text" class="form-control" id="prenom" name="prenom" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Adresse email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Envoyer</button>
-        </form>
-    </div>
-
-=======
-
->>>>>>> 72670a3664a8a28323279113bd67a25b13c910fc
     <!-- Bootstrap JS et dépendances -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
