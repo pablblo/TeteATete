@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Mettre à jour le mot de passe et réinitialiser le token
         $stmt = $db->prepare("UPDATE User SET Mot_de_passe = :new_password, reset_token = NULL WHERE reset_token = :token");
         $stmt->execute(['new_password' => $new_password, 'token' => $token]);
-        $message = "Votre mot de passe a été réinitialisé avec succès. <a href='login.html'>Retour à la connexion</a>";
+        $message = "Votre mot de passe a été réinitialisé avec succès. <a href='login.php'>Retour à la connexion</a>";
     } else {
         $message = "Token invalide. Veuillez réessayer ou demander un nouveau lien de réinitialisation.";
     }
