@@ -4,13 +4,13 @@
 require 'db_connection.php';
 
 // Démarrer la session pour l'utilisateur
-session_start();
+//session_start();
 
 // Vérifier si l'utilisateur est connecté (sinon redirection)
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Rediriger vers la page de login si l'utilisateur n'est pas connecté
-    exit();
-}
+//if (!isset($_SESSION['user_id'])) {
+//    header("Location: login.php"); // Rediriger vers la page de login si l'utilisateur n'est pas connecté
+//    exit();
+//}
 
 // Récupérer l'ID de l'utilisateur connecté
 $user_id = $_SESSION['user_id'];
