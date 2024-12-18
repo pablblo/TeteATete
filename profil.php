@@ -50,27 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $prenom = $_POST['prenom'];
         $email = $_POST['email'];
         $bio = $_POST['bio'];
-        $photo = null;
+        $photo_de_profil = null;
 
         // Si une nouvelle photo de profil est téléchargée
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-            $photo = file_get_contents($_FILES['photo']['tmp_name']);
+        if (isset($_FILES['photo_de_profil']) && $_FILES['photo_de_profil']['error'] === UPLOAD_ERR_OK){
+            $photo_de_profil = file_get_contents($_FILES['photo_de_profil']['tmp_name']);
+        } else {
+            $photo_de_profil = null;
         }
 
         try {
             // Mettre à jour les informations dans la base de données
             $update_query = $db->prepare("
                 UPDATE User
-                SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = IFNULL(?, Photo_de_Profil)
+                SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ?
                 WHERE idUser = ?
             ");
-            $update_query->execute([$nom, $prenom, $email, $bio, $photo, $user_id]);
+            $update_query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
 
             // Recharger la page pour voir les nouvelles informations
             header("Location: profil.php");
             exit();
         } catch (Exception $e) {
             $error_message = "Erreur lors de la mise à jour du profil : " . $e->getMessage();
+            echo $e;
         }
     }
 
@@ -157,12 +160,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             border-radius: 50%;
             margin-right: 5px;
     }
-
-
     </style>
 </head>
 <body>
-    <!-- Navbar -->
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container">
@@ -218,8 +218,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             </ul>
         </div>
     </div>
-</nav>
-    <!-- Profil -->
+    </nav>
+
     <!-- Profil -->
     <div class="container text-center mt-5">
         <h1><?php echo htmlspecialchars($user['Prenom']) . " " . htmlspecialchars($user['Nom']); ?></h1>
@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
         ?>
         <img src="<?php echo $image_src; ?>" class="profile-img" alt="Photo de profil">
-        <p><?php echo htmlspecialchars($user['Bio']); ?></p>
+        <p><?php echo htmlspecialchars($user['Bio'] ?? ''); ?></p>
         <p><strong>Email :</strong> <?php echo htmlspecialchars($user['Mail']); ?></p>
 
         <button id="edit-profile-btn" class="btn btn-primary">Modifier le profil</button>
@@ -254,11 +254,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 </div>
                 <div class="mb-3">
                     <label for="bio" class="form-label">Bio :</label>
-                    <textarea name="bio" class="form-control" required><?php echo htmlspecialchars($user['Bio']); ?></textarea>
+                    <textarea name="bio" class="form-control" required><?php echo htmlspecialchars($user['Bio'] ?? ''); ?></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="photo" class="form-label">Photo de profil :</label>
-                    <input type="file" name="photo" class="form-control">
+                    <label for="photo_de_profil" class="form-label">Photo de profil :</label>
+                    <input type="file" name="photo_de_profil" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-success">Mettre à jour</button>
             </form>

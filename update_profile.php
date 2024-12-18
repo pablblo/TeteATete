@@ -19,10 +19,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bio = $_POST['bio'];
 
     // Gérer l'upload de l'image de profil
-    if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] == 0) {
-        $profile_pic = file_get_contents($_FILES['profile_pic']['tmp_name']);
+    if (isset($_FILES['photo_de_profil']) && $_FILES['photo_de_profil']['error'] === UPLOAD_ERR_OK) {
+        $photo_de_profil = file_get_contents($_FILES['photo_de_profil']['tmp_name']);
         $query = $db->prepare("UPDATE User SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ? WHERE idUser = ?");
-        $query->execute([$nom, $prenom, $email, $bio, $profile_pic, $user_id]);
+        $query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
     } else {
         $query = $db->prepare("UPDATE User SET Nom = ?, Prenom = ?, Mail = ?, Bio = ? WHERE idUser = ?");
         $query->execute([$nom, $prenom, $email, $bio, $user_id]);
@@ -32,3 +32,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: profile.php");
     exit();
 }
+?>

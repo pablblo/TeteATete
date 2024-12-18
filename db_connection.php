@@ -14,4 +14,7 @@ try {
     // Si la connexion échoue, afficher un message d'erreur
     die("Erreur de connexion à la base de données : " . $e->getMessage());
 }
+
+ini_set('display_errors', 1);  // Enable error display
+error_reporting(E_ALL);        // Report all errors
 ?>
