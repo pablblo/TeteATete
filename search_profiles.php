@@ -1,7 +1,6 @@
 <?php
 // Inclusion du fichier de connexion à la base de données
 require 'db_connection.php';
-include 'navbar.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -50,6 +49,7 @@ try {
     </style>
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <div class="container mt-5">
         <h3 class="mb-4">Résultats pour "<?php echo htmlspecialchars($query); ?>"</h3>
         <div class="row">

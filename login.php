@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="links">
                         <a href="reset_password.php">Mot de passe oublié</a>
                         <p></p>
-                        <a href="register.html">Inscription</a>
+                        <a href="register.php">Inscription</a>
                     </div>
                 </form>
             </div>
