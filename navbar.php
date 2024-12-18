@@ -9,8 +9,10 @@ $user = $query->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Navbar -->
-  
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+
+<link rel="icon" href="images/logo.png">
+<div class="container-fluid" style="height: 125px"></div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
     <div class="container">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" href="page_principale.php">

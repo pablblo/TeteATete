@@ -52,10 +52,6 @@ $courses_stmt = $db->prepare("
 $courses_stmt->execute([$profile_id]);
 $user_courses = $courses_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Inclusion de la connexion à la base de données
-require 'db_connection.php';
-
-
 // Récupération des informations utilisateur connecté
 $user_id = $_SESSION['user_id'];
 try {

@@ -251,6 +251,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #0061A0;
             color: white;
         }
+
         .text-danger {
             font-size: 16px;
             font-weight: bold;
