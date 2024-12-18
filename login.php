@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" placeholder="Mot de passe" id="password" name="password" required>
                     <button type="submit">Se Connecter</button>
                     <div class="links">
-                        <a href="mot_de_passe_oublie.html">Mot de passe oublié</a>
+                        <a href="reset_passord.php">Mot de passe oublié</a>
                         <p></p>
                         <a href="register.html">Inscription</a>
                     </div>
