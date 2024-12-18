@@ -3,7 +3,7 @@
 require 'db_connection.php';
 
 // Démarrer la session
-session_start();
+
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {

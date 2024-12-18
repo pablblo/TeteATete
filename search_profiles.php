@@ -2,9 +2,6 @@
 // Inclusion du fichier de connexion à la base de données
 require 'db_connection.php';
 
-// Démarrer la session
-session_start();
-
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -100,7 +97,7 @@ try {
                 </li>
 
                 <li class="nav-item ms-3">
-                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
+                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.php">Déconnexion</a>
                 </li>
             </ul>
         </div>

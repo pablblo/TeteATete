@@ -1,6 +1,5 @@
 <?php
-session_start();
-require 'config.php'; // Connexion à la base de données
+require 'db_connection.php'; // Connexion à la base de données
 
 // Inclure la bibliothèque PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
@@ -18,14 +17,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Veuillez entrer une adresse e-mail valide.";
     } else {
         // Vérifiez si l'email existe dans la base de données
-        $stmt = $pdo->prepare("SELECT * FROM User WHERE Mail = :email");
+        $stmt = $db->prepare("SELECT * FROM User WHERE Mail = :email");
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
             // Génération d'un token de réinitialisation
             $token = bin2hex(random_bytes(50));
-            $stmt = $pdo->prepare("UPDATE User SET reset_token = :token WHERE Mail = :email");
+            $stmt = $db->prepare("UPDATE User SET reset_token = :token WHERE Mail = :email");
             $stmt->execute(['token' => $token, 'email' => $email]);
 
             // Préparer l'e-mail avec PHPMailer

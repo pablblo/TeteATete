@@ -6,7 +6,7 @@ require 'db_connection.php';
 include 'navbar.php';
 
 // Démarrer la session pour l'utilisateur
-session_start();
+
 
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {
@@ -82,7 +82,7 @@ $user = $query->fetch(PDO::FETCH_ASSOC);
         .profile-container {
             background-color: white;
             text-align: center; /* Centre le texte dans le conteneur */
-            border: 2px solid #0061A0;
+            border: 1px solid #0061A0;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin: 20px auto;

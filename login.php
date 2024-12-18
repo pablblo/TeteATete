@@ -1,6 +1,5 @@
 <?php
-session_start();
-require 'config.php'; // Connexion à la base de données
+require 'db_connection.php'; // Connexion à la base de données
 
 // Vérifier s'il y a déjà un message d'erreur
 $error_message = '';
@@ -19,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Recherche l'utilisateur dans la base de données
-    $stmt = $pdo->prepare("SELECT * FROM User WHERE Mail = :email"); // Nom de la table corrigé
+    $stmt = $db->prepare("SELECT * FROM User WHERE Mail = :email"); // Nom de la table corrigé
     $stmt->execute(['email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -41,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -56,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-<body>
     <div class="page-container">
         <div class="header-container">
             <img src="images/logo.png" alt="Logo Tête à Tête" class="logo">

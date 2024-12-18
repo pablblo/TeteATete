@@ -4,7 +4,7 @@ require 'db_connection.php'; // Connexion à la base de données
 
 $userId = $_GET['idUser']; // L'ID de l'utilisateur, par exemple, passé dans l'URL
 
-$stmt = $pdo->prepare("SELECT Photo_de_Profil FROM User WHERE idUser = ?");
+$stmt = $db->prepare("SELECT Photo_de_Profil FROM User WHERE idUser = ?");
 $stmt->execute([$userId]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

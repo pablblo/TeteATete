@@ -4,7 +4,7 @@ require 'db_connection.php';
 include 'navbar.php';
 
 // Démarrer la session pour l'utilisateur
-session_start();
+
 
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {

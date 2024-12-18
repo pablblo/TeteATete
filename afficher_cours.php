@@ -1,6 +1,6 @@
 <?php
 // Connexion à la base de données
-$conn = new PDO("mysql:host=localhost;dbname=bdd_tat;charset=utf8", "root", "");
+require 'db_connection.php';
 
 // Récupérer tous les cours
 $sql = "SELECT * FROM Cours";

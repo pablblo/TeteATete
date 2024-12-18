@@ -2,10 +2,6 @@
 // Inclusion de la connexion à la base de données
 require 'db_connection.php';
 
-include 'navbar.php';
-
-session_start();
-
 // Vérification de connexion utilisateur
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -267,6 +263,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <!-- Bouton pour ouvrir la section de création de cours -->
     <div class="container my-4">
         <button 

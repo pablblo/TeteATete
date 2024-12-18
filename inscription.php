@@ -1,11 +1,10 @@
 <?php
 // Connexion à la base de données
-$conn = new PDO("mysql:host=localhost;dbname=BDD_TAT;charset=utf8", "root", "");
+require 'db_connection.php';
 
 // Récupérer les données POST
 $idCours = $_POST['idCours'];
 $role = $_POST['role'];
-session_start();
 $idUser = $_SESSION['idUser'];
 
 // Vérifier si l'utilisateur est déjà inscrit

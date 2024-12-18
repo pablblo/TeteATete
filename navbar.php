@@ -1,3 +1,13 @@
+<?php
+// Récupérer l'ID de l'utilisateur connecté
+$user_id = $_SESSION['user_id'];
+
+// Récupérer les informations de l'utilisateur depuis la base de données
+$query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
+$query->execute([$user_id]);
+$user = $query->fetch(PDO::FETCH_ASSOC);
+?>
+
 <!-- Navbar -->
   
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
@@ -23,13 +33,16 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
                 </li>
+
                 <!-- Section de recherche -->
-                <form class="d-flex ms-3" action="search_profiles.php" method="GET">
-                    <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
-                    <button class="btn btn-outline-primary" type="submit">Rechercher</button>
-                </form>
+                <li class="nav-item d-flex align-items-center ms-3">
+                    <form class="d-flex" action="search_profiles.php" method="GET" style="margin-bottom: 0;">
+                        <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
+                        <button class="btn btn-outline-primary" type="submit">Rechercher</button>
+                    </form>
+                </li>
+
                 <!-- Profil utilisateur connecté -->
-                
                 <li class="nav-item ms-3 d-flex align-items-center">
                     <a class="nav-link d-flex align-items-center" href="profil.php">
                         <?php 
@@ -49,7 +62,7 @@
                 </li>
 
                 <li class="nav-item ms-3">
-                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.html">Déconnexion</a>
+                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.php">Déconnexion</a>
                 </li>
             </ul>
         </div>

@@ -1,6 +1,4 @@
 <?php
-
-session_start();
 require 'db_connection.php'; // Connexion à la base de données
 
 // Vérifier si l'utilisateur est connecté

@@ -7,7 +7,7 @@ require 'vendor/autoload.php';
 require 'db_connection.php';
 include 'navbar.php';
 
-session_start();
+
 
 // Vérification de connexion utilisateur
 if (!isset($_SESSION['user_id'])) {
