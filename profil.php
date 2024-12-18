@@ -2,8 +2,6 @@
 // Inclusion du fichier de connexion à la base de données
 require 'db_connection.php';
 
-include 'navbar.php';
-
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -162,6 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     </style>
 </head>
 <body>
+    <?php include 'navbar.php'; ?>
     <!-- Profil -->
     <div class="container text-center mt-5">
         <h1><?php echo htmlspecialchars($user['Prenom']) . " " . htmlspecialchars($user['Nom']); ?></h1>
