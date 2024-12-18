@@ -20,31 +20,6 @@ $query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
 $query->execute([$user_id]);
 $user = $query->fetch(PDO::FETCH_ASSOC);
 
-// Récupérer l'identifiant du message à modifier
-$message_id = $_GET['id']; // Assurez-vous que l'ID est passé dans l'URL
-
-// Récupérer le message à modifier
-$message_query = $db->prepare("SELECT * FROM Message_Contact WHERE idMessage_Contact = ?");
-$message_query->execute([$message_id]);
-$Message_Contact = $message_query->fetch(PDO::FETCH_ASSOC);
-
-// Mise à jour des informations si le formulaire est soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mail = $_POST['mail'];
-    $message = $_POST['message'];
-
-    // Mettre à jour les informations dans la base de données
-    $update_query = $db->prepare("
-        UPDATE Message_Contact
-        SET Mail = ?, message = ?
-        WHERE idMessage_Contact = ?
-    ");
-    $update_query->execute([$mail, $message, $message_id]);
-
-    // Recharger la page pour voir les nouvelles informations
-    header("Location: contact.php");
-    exit();
-}
 ?>
 
 <!-- Navbar -->
