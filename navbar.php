@@ -3,13 +3,12 @@
 $user_id = $_SESSION['user_id'];
 
 // Récupérer les informations de l'utilisateur depuis la base de données
-$query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
-$query->execute([$user_id]);
-$user = $query->fetch(PDO::FETCH_ASSOC);
+$statement = $db->prepare("SELECT * FROM User WHERE idUser = ?");
+$statement->execute([$user_id]);
+$user = $statement->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!-- Navbar -->
-
 <link rel="icon" href="images/logo.png">
 <div class="container-fluid" style="height: 125px"></div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
@@ -26,15 +25,9 @@ $user = $query->fetch(PDO::FETCH_ASSOC);
         <!-- Navbar Links -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="contact.php">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
-                </li>
+                <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="contact.php">Contact</a> </li>
+                <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a> </li>
+                <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a> </li>
 
                 <!-- Section de recherche -->
                 <li class="nav-item d-flex align-items-center ms-3">

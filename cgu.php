@@ -5,9 +5,6 @@ require 'db_connection.php';
 // Inclusion de la barre de navigation
 include 'navbar.php';
 
-// Démarrer la session pour l'utilisateur
-
-
 // Vérifier si l'utilisateur est connecté (sinon redirection)
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Rediriger vers la page de login si l'utilisateur n'est pas connecté
@@ -139,7 +136,7 @@ $user = $query->fetch(PDO::FETCH_ASSOC);
         <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
             Conditions générales d'utilisation
         </a>
-        |
+        
         <a href="mentionslegales.php" class="text-decoration-none mx-3 text-dark">
             Mentions légales
         </a>
