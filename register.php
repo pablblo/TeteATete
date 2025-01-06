@@ -1,6 +1,9 @@
 <?php
 require 'db_connection.php';
 
+// Initialiser la variable de message d'erreur
+$error_message = '';
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Retrieve form data
@@ -16,16 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userExists = $stmt->fetch();
 
     if ($userExists) {
-        die("Cet utilisateur existe déjà.");
+        $error_message = "Cet utilisateur existe déjà.";
+    } else {
+        // Insert the new user into the database
+        $stmt = $db->prepare("INSERT INTO `User` (Nom, Prenom, Mail, Mot_de_passe, Classe) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$nom, $prenom, $email, $password, $classe]);
+
+        echo "Inscription réussie !";
+        header("Location: login.php");
+        exit();
     }
-
-    // Insert the new user into the database
-    $stmt = $db->prepare("INSERT INTO `User` (Nom, Prenom, Mail, Mot_de_passe, Classe) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$nom, $prenom, $email, $password, $classe]);
-
-    echo "Inscription réussie !";
-    header("Location: login.php");
-    exit();
 }
 ?>
 
@@ -51,6 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Registration form -->
         <div class="login-container">
             <div class="form-container">
+                        <!-- Afficher le message d'erreur s'il existe -->
+                <?php if (!empty($error_message)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $error_message; ?>
+                    </div>
+                <?php endif; ?>
                 <form id="registrationForm" action="register.php" method="POST"> <!-- Self-submitting form -->
                     <input type="text" placeholder="Nom" id="nom" name="nom" required>
                     <input type="text" placeholder="Prénom" id="prenom" name="prenom" required>
