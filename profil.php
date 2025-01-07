@@ -52,18 +52,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         // Si une nouvelle photo de profil est téléchargée
         if (isset($_FILES['photo_de_profil']) && $_FILES['photo_de_profil']['error'] === UPLOAD_ERR_OK){
             $photo_de_profil = file_get_contents($_FILES['photo_de_profil']['tmp_name']);
-        } else {
-            $photo_de_profil = null;
         }
 
         try {
-            // Mettre à jour les informations dans la base de données
-            $update_query = $db->prepare("
-                UPDATE User
-                SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ?
-                WHERE idUser = ?
-            ");
-            $update_query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
+            if ($photo_de_profil) {
+                // Mettre à jour les informations avec la photo de profil
+                $update_query = $db->prepare("
+                    UPDATE User
+                    SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ?
+                    WHERE idUser = ?
+                ");
+                $update_query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
+            } else {
+                // Mettre à jour les informations sans la photo de profil
+                $update_query = $db->prepare("
+                    UPDATE User
+                    SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?
+                    WHERE idUser = ?
+                ");
+                $update_query->execute([$nom, $prenom, $email, $bio, $user_id]);
+            }
 
             // Recharger la page pour voir les nouvelles informations
             header("Location: profil.php");
