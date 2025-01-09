@@ -18,28 +18,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Recherche l'utilisateur dans la base de données
-    $stmt = $db->prepare("SELECT * FROM User WHERE Mail = :email"); // Nom de la table corrigé
+    $stmt = $db->prepare("SELECT * FROM User WHERE Mail = :email");
     $stmt->execute(['email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['Mot_de_passe'])) { // Vérification du mot de passe
         // Connexion réussie, régénération de l'ID de session
         session_regenerate_id(true);
-        
+
         // Stocke les infos utilisateur dans la session
         $_SESSION['user_id'] = $user['idUser'];
         $_SESSION['username'] = $user['Nom'];
+        $_SESSION['Admin'] = $user['Admin']; // Stocker le rôle Admin
 
-        // Redirection après connexion réussie
-        header("Location: page_principale.php");
+        // Redirection conditionnelle selon le rôle
+        if ($user['Admin'] == 1) { // Si administrateur
+            header("Location: admin.php");
+        } else { // Si utilisateur standard
+            header("Location: page_principale.php");
+        }
         exit();
     } else {
         $_SESSION['error_message'] = "Identifiants incorrects. Veuillez réessayer."; // Message d'erreur
-        header("Location: login.php"); // Redirection vers le formulaire de connexion
+        header("Location: login.php");
         exit();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -57,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
+<body>
     <div class="page-container">
         <div class="header-container">
             <img src="images/logo.png" alt="Logo Tête à Tête" class="logo">
