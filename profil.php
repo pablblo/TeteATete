@@ -37,11 +37,10 @@ $courses_stmt = $db->prepare("
 $courses_stmt->execute([$user_id]);
 $user_courses = $courses_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Gestion des actions POST
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
 
-    // Gestion de la mise à jour du profil
     if ($action === 'update_profile') {
         $nom = $_POST['nom'];
         $prenom = $_POST['prenom'];
@@ -49,15 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $bio = $_POST['bio'];
         $photo_de_profil = null;
 
-        // Si une nouvelle photo de profil est téléchargée
-        if (isset($_FILES['photo_de_profil']) && $_FILES['photo_de_profil']['error'] === UPLOAD_ERR_OK){
+        // Si une photo est téléchargée
+        if (isset($_FILES['photo_de_profil']) && $_FILES['photo_de_profil']['error'] === UPLOAD_ERR_OK) {
             $photo_de_profil = file_get_contents($_FILES['photo_de_profil']['tmp_name']);
-        } else {
-            $photo_de_profil = null;
         }
 
         try {
-            // Mettre à jour les informations dans la base de données
             $update_query = $db->prepare("
                 UPDATE User
                 SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ?
@@ -65,49 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             ");
             $update_query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
 
-            // Recharger la page pour voir les nouvelles informations
-            header("Location: profil.php");
-            exit();
+            header('Content-Type: application/json');
+
+            echo json_encode(['success' => true]);
         } catch (Exception $e) {
-            $error_message = "Erreur lors de la mise à jour du profil : " . $e->getMessage();
-            echo $e;
+            echo json_encode(['success' => false, 'message' => 'Erreur : ' . $e->getMessage()]);
         }
-    }
-
-    // Gestion de la désinscription
-    if ($action === 'unregister_course') {
-        $course_id = $_POST['course_id'];
-
-        try {
-            // Vérifier si l'utilisateur est inscrit
-            $check_inscription_stmt = $db->prepare("SELECT role FROM Inscription WHERE idCours = ? AND idUser = ?");
-            $check_inscription_stmt->execute([$course_id, $user_id]);
-            $user_inscription = $check_inscription_stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (!$user_inscription) {
-                throw new Exception("Vous n'êtes pas inscrit à ce cours.");
-            }
-
-            // Supprimer l'inscription
-            $delete_stmt = $db->prepare("DELETE FROM Inscription WHERE idCours = ? AND idUser = ?");
-            $delete_stmt->execute([$course_id, $user_id]);
-
-            // Mettre à jour les places restantes
-            if ($user_inscription['role'] === 'eleve') {
-                $update_places_stmt = $db->prepare("UPDATE Cours SET Places_restants_Eleve = Places_restants_Eleve + 1 WHERE idCours = ?");
-            } else {
-                $update_places_stmt = $db->prepare("UPDATE Cours SET Places_restants_Tuteur = Places_restants_Tuteur + 1 WHERE idCours = ?");
-            }
-            $update_places_stmt->execute([$course_id]);
-
-            // Rediriger pour recharger la page et mettre à jour la liste des cours
-            header("Location: profil.php");
-            exit();
-        } catch (Exception $e) {
-            $error_message = "Erreur lors de la désinscription : " . $e->getMessage();
-        }
+        exit();
     }
 }
+
 ?>
 
 
@@ -178,33 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <p><?php echo htmlspecialchars($user['Bio'] ?? ''); ?></p>
         <p><strong>Email :</strong> <?php echo htmlspecialchars($user['Mail']); ?></p>
 
-        <button id="edit-profile-btn" class="btn btn-primary">Modifier le profil</button>
-        <div id="edit-form" class="form-container">
-            <form action="profil.php" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="update_profile">
-                <div class="mb-3">
-                    <label for="nom" class="form-label">Nom :</label>
-                    <input type="text" name="nom" class="form-control" value="<?php echo htmlspecialchars($user['Nom']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="prenom" class="form-label">Prénom :</label>
-                    <input type="text" name="prenom" class="form-control" value="<?php echo htmlspecialchars($user['Prenom']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email :</label>
-                    <input type="email" name="email" class="form-control" value="<?php echo htmlspecialchars($user['Mail']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="bio" class="form-label">Bio :</label>
-                    <textarea name="bio" class="form-control" required><?php echo htmlspecialchars($user['Bio'] ?? ''); ?></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="photo_de_profil" class="form-label">Photo de profil :</label>
-                    <input type="file" name="photo_de_profil" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-success">Mettre à jour</button>
-            </form>
-        </div>
+        <button id="edit-profile-btn" class="btn btn-primary" onclick="openEditProfileModal()">Modifier le profil</button>
+        
     </div>
 
     <script>
@@ -283,7 +221,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <?php endif; ?>
     </div>
 </div>
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Modifier le profil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm" enctype="multipart/form-data">
+                    <input type="hidden" name="action" value="update_profile">
+                    <div class="mb-3">
+                        <label for="edit-nom" class="form-label">Nom :</label>
+                        <input type="text" id="edit-nom" name="nom" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-prenom" class="form-label">Prénom :</label>
+                        <input type="text" id="edit-prenom" name="prenom" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-email" class="form-label">Email :</label>
+                        <input type="email" id="edit-email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-bio" class="form-label">Bio :</label>
+                        <textarea id="edit-bio" name="bio" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-photo" class="form-label">Photo de profil :</label>
+                        <input type="file" id="edit-photo" name="photo_de_profil" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="submitEditProfile()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>*
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Ouvre la modale de modification du profil avec les données actuelles
+    function openEditProfileModal() {
+        document.getElementById('edit-nom').value = "<?php echo htmlspecialchars($user['Nom']); ?>";
+        document.getElementById('edit-prenom').value = "<?php echo htmlspecialchars($user['Prenom']); ?>";
+        document.getElementById('edit-email').value = "<?php echo htmlspecialchars($user['Mail']); ?>";
+        document.getElementById('edit-bio').value = "<?php echo htmlspecialchars($user['Bio'] ?? ''); ?>";
+        const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+        editProfileModal.show();
+    }
+
+    // Soumet le formulaire de modification via AJAX
+    function submitEditProfile() {
+        const formData = new FormData(document.getElementById('editProfileForm'));
+
+        fetch('profil.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Profil mis à jour avec succès !');
+                location.reload();
+            } else {
+                alert(data.message || 'Une erreur est survenue.');
+            }
+        })
+        .catch(error => console.error('Erreur :', error));
+    }
+</script>
 
 
 <footer class="bg-light text-center py-3 mt-5">

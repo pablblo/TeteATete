@@ -9,9 +9,48 @@ if (isset($_SESSION['error_message'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Vérifier si le reCAPTCHA a été rempli
+    if (empty($_POST['g-recaptcha-response'])) {
+        $_SESSION['error_message'] = "Veuillez valider le reCAPTCHA.";
+        header("Location: login.php");
+        exit();
+    }
+
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
+    $secretKey = '6Lc9KrMqAAAAAJpdJP2G8GWD0MDD87W0SXaFV5GV'; // Votre clé secrète
+    $remoteIp = $_SERVER['REMOTE_ADDR'];
+
+    // Requête vers l'API reCAPTCHA de Google
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => $secretKey,
+        'response' => $recaptchaResponse,
+        'remoteip' => $remoteIp
+    ];
+
+    // Faire une requête POST pour valider le reCAPTCHA
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+    $context = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $resultJson = json_decode($result);
+
+    // Vérifier la validité du reCAPTCHA
+    if (!$resultJson->success) {
+        $_SESSION['error_message'] = "Échec de la validation du reCAPTCHA. Veuillez réessayer.";
+        header("Location: login.php");
+        exit();
+    }
+
+    // Le reCAPTCHA est validé, continuer avec le traitement
     $email = trim($_POST['email']);
     $password = $_POST['password'];
-
+    
     // Validation de l'email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         die("Adresse e-mail invalide.");
@@ -80,6 +119,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form action="login.php" method="POST">
                     <input type="email" placeholder="Mail" id="email" name="email" required>
                     <input type="password" placeholder="Mot de passe" id="password" name="password" required>
+                    <br>
+                    <br>
+                    
+                    <div class="g-recaptcha" data-sitekey="6Lc9KrMqAAAAAPSGlsM294Va-fL6FUhavCjtPpPC"></div>
+                    <br>
+
                     <button type="submit">Se Connecter</button>
                     <div class="links">
                         <a href="reset_password.php">Mot de passe oublié</a>
@@ -92,5 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="container-fluid" style="height: 125px"></div>
     </div>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 </body>
 </html>
