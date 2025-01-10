@@ -54,12 +54,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
 
         try {
-            $update_query = $db->prepare("
-                UPDATE User
-                SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ?
-                WHERE idUser = ?
-            ");
-            $update_query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
+            if ($photo_de_profil) {
+                // Mettre à jour les informations avec la photo de profil
+                $update_query = $db->prepare("
+                    UPDATE User
+                    SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?, Photo_de_Profil = ?
+                    WHERE idUser = ?
+                ");
+                $update_query->execute([$nom, $prenom, $email, $bio, $photo_de_profil, $user_id]);
+            } else {
+                // Mettre à jour les informations sans la photo de profil
+                $update_query = $db->prepare("
+                    UPDATE User
+                    SET Nom = ?, Prenom = ?, Mail = ?, Bio = ?
+                    WHERE idUser = ?
+                ");
+                $update_query->execute([$nom, $prenom, $email, $bio, $user_id]);
+            }
 
             header('Content-Type: application/json');
 
