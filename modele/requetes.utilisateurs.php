@@ -1,10 +1,7 @@
 <?php
+include 'connexion.php';
 
-// on récupère les requêtes génériques
-include('requetes.generiques.php');
-
-//on définit le nom de la table
-$table = "users";
+$table = "user";
 
 /**
  * Recherche un utilisateur en fonction du nom passé en paramètre
@@ -13,10 +10,10 @@ $table = "users";
  * @return array
  */
 function rechercheParMail(PDO $db, string $mail): array {
-    $statement = $db->prepare('SELECT * FROM  users WHERE mail = :mail');
+    $statement = $db->prepare('SELECT * FROM  user WHERE mail = :mail');
     $statement->bindParam(":mail", $mail);
     $statement->execute();
-    return $statement->fetchAll();
+    return $statement->fetch(PDO::FETCH_ASSOC);
 }
 
 /**
@@ -25,8 +22,8 @@ function rechercheParMail(PDO $db, string $mail): array {
  * @return array
  */
 function recupereTousUtilisateurs(PDO $db): array {
-    $query = 'SELECT * FROM users';
-    return $db->query($query)->fetchAll();
+    $query = 'SELECT * FROM user';
+    return $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 
 /**
@@ -58,7 +55,7 @@ function ajouteUtilisateur(PDO $db, array $utilisateur): bool {
 function rechercheUtilisateur(PDO $db, string $search_input): array {
     $query = 'SELECT idUser, Prenom, Nom, Photo_de_Profil
               FROM User
-              WHERE CONCAT(Prenom, ' ', Nom) Like :search_request';
+              WHERE CONCAT(Prenom, " ", Nom) Like :search_request';
     $statement = $db->prepare($query);
     $search_request = '%' . $search_input . '%';
     $statement->bindParam(":search_request", $search_request, PDO::PARAM_STR);
