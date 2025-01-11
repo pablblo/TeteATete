@@ -1,33 +1,81 @@
 <?php
 require 'db_connection.php';
 
-// Handle form submission
+// Initialiser la variable de message d'erreur
+$error_message = '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Retrieve form data
+    // Récupération des données du formulaire
     $nom = $_POST['nom'];
     $prenom = $_POST['prenom'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash password
+    $password = $_POST['password'];
     $classe = $_POST['classe'];
 
-    // Check if the user already exists
-    $stmt = $db->prepare("SELECT * FROM `User` WHERE `Mail` = ?");
-    $stmt->execute([$email]);
-    $userExists = $stmt->fetch();
-
-    if ($userExists) {
-        die("Cet utilisateur existe déjà.");
+    // Validation : Mot de passe
+    if (strlen($password) < 8 || 
+        !preg_match('/[0-9]/', $password) || 
+        !preg_match('/[\W]/', $password)) {
+        $error_message = "Le mot de passe doit contenir au moins 8 caractères, un chiffre, et un caractère spécial.";
     }
 
-    // Insert the new user into the database
-    $stmt = $db->prepare("INSERT INTO `User` (Nom, Prenom, Mail, Mot_de_passe, Classe) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$nom, $prenom, $email, $password, $classe]);
+    // Vérifier si l'utilisateur existe déjà (Email)
+    if (empty($error_message)) { // Si aucune erreur précédente
+        $stmt = $db->prepare("SELECT * FROM `User` WHERE `Mail` = ?");
+        $stmt->execute([$email]);
+        $userExists = $stmt->fetch();
 
-    echo "Inscription réussie !";
-    header("Location: login.php");
-    exit();
+        if ($userExists) {
+            $error_message = "Cet email est déjà utilisé.";
+        }
+    }
+
+    // Si aucune erreur, continuer avec le reCAPTCHA
+    if (empty($error_message)) {
+        // Validation reCAPTCHA
+        $recaptchaResponse = $_POST['g-recaptcha-response'];
+        $secretKey = '6Lf8HLMqAAAAAMavW7tlUiZ3S8UkoqCwglEZuBnn'; // Votre clé secrète reCAPTCHA
+        $remoteIp = $_SERVER['REMOTE_ADDR'];
+
+        // Requête vers l'API reCAPTCHA
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = [
+            'secret' => $secretKey,
+            'response' => $recaptchaResponse,
+            'remoteip' => $remoteIp
+        ];
+
+        $options = [
+            'http' => [
+                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method'  => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+        $context = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        $resultJson = json_decode($result);
+
+        // Vérifier si reCAPTCHA est validé
+        if (!$resultJson->success) {
+            $error_message = "Captcha invalide, veuillez réessayer.";
+        } else {
+            // Insérer le nouvel utilisateur
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT); // Hashage du mot de passe
+            $stmt = $db->prepare("INSERT INTO `User` (Nom, Prenom, Mail, Mot_de_passe, Classe) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$nom, $prenom, $email, $hashedPassword, $classe]);
+
+            // Redirection après succès
+            header("Location: login.php");
+            exit();
+        }
+    }
 }
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -51,7 +99,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Registration form -->
         <div class="login-container">
             <div class="form-container">
+
                 <form id="registrationForm" action="register.php" method="POST"> <!-- Self-submitting form -->
+                    <?php if (!empty($error_message)): ?>
+                        <div style="color: red; font-weight: bold; margin-bottom: 10px;">
+                            <?php echo htmlspecialchars($error_message); ?>
+                        </div>
+                     <?php endif; ?>
                     <input type="text" placeholder="Nom" id="nom" name="nom" required>
                     <input type="text" placeholder="Prénom" id="prenom" name="prenom" required>
                     <input type="email" placeholder="Mail" id="email" name="email" required>
@@ -71,11 +125,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <option value="A2">A2</option>
                         <option value="A3">A3</option>
                     </select>
-                    
+                    <br>
+                    <div class="g-recaptcha" data-sitekey="6Lf8HLMqAAAAAGBlyucu9ccoRRYKzxlg6u6dqN3g"></div>
+                    <br>
+
                     <button id="myBtn" type="submit">S'inscrire</button>
                     <div class="links">
                         <a href="login.php">Déjà inscrit ? Se connecter</a>
                     </div>
+                    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
                 </form>
             </div>
         </div>
@@ -166,5 +225,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         </script> 
     </div>
+
 </body>
 </html>

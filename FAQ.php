@@ -192,7 +192,7 @@ $forum_posts = $forum_stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="faq-item">
             <h3>Assistance technique</h3>
             <h4>Qui contacter en cas de problème technique ?</h4>
-            <p>Contactez le support technique à support.client@gmail.com ou utilisez le formulaire de contact.</p>
+            <p>Contactez le support technique à teteatete.innowave@gmail.com ou utilisez le formulaire de contact.</p>
         </div>
         <div class="faq-item">
             <h3>Modification du profil</h3>

@@ -267,11 +267,10 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <?php include 'navbar.php'; ?>
     <!-- Bouton pour ouvrir la section de création de cours -->
-    <div class="container my-4">
-        <button 
-            id="create-course-btn" 
-            class="btn-create-course"
-            style="
+    <div class="container my-4 text-center">
+    <button 
+        class="btn btn-primary"
+        style="
                 background-color: #0061A0;
                 color: white;
                 border: none;
@@ -284,13 +283,13 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 cursor: pointer;
                 text-align: center;
                 transition: background-color 0.3s ease;"
-            onmouseover="this.style.backgroundColor='#004f80';"
-            onmouseout="this.style.backgroundColor='#0061A0';">
-            Créer un cours
-        </button>
-        
+        data-bs-toggle="modal"
+        data-bs-target="#createCourseModal">
+        Créer un cours
+    </button>
     </div>
 
+    
     <!-- Section de création de cours -->
     <section id="create-course-section" class="create-course-section container">
         <h2>Créer un nouveau cours</h2>
@@ -318,6 +317,38 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
         <br>
     </section>
+<!-- Modal pour la création de cours -->
+<div class="modal fade" id="createCourseModal" tabindex="-1" aria-labelledby="createCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCourseModalLabel">Créer un nouveau cours</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createCourseForm" method="POST" action="">
+                    <div class="mb-3">
+                        <label for="course_title" class="form-label">Titre du cours</label>
+                        <input type="text" id="course_title" name="course_title" class="form-control" placeholder="Titre du cours" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Heure</label>
+                        <input type="time" id="time" name="time" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="participants" class="form-label">Nombre de participants</label>
+                        <input type="number" id="participants" name="participants" class="form-control" required>
+                    </div>
+                    <button type="submit" name="create_course" class="btn btn-primary">Créer le cours</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
     <div class="container mb-4">
     <form method="GET" action="page_principale.php" class="row g-3">
@@ -471,6 +502,8 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             createCourseSection.style.display = createCourseSection.style.display === 'none' ? 'block' : 'none';
         });
     </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <footer class="bg-light text-center py-3 mt-5">
         <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
         <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
