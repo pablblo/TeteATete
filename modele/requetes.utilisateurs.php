@@ -13,7 +13,12 @@ function rechercheParMail(PDO $db, string $mail): array {
     $statement = $db->prepare('SELECT * FROM  user WHERE mail = :mail');
     $statement->bindParam(":mail", $mail);
     $statement->execute();
-    return $statement->fetch(PDO::FETCH_ASSOC);
+    if ($statement->errorCode() != '00000') {
+        $_SESSION['message'] = "error with rechercheParMail function";
+        return [];
+    }
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    return $result !== false ? $result : [];
 }
 
 /**

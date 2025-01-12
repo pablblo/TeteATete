@@ -5,4 +5,11 @@ function showOnlyBlock(blockId, blockClass) {
     });
 }
 
-export { showOnlyBlock }
+function toggleModal(modalId, isVisible) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = isVisible ? "flex" : "none";
+    }
+}
+
+export { showOnlyBlock, toggleModal }

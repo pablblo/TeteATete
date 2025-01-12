@@ -84,7 +84,6 @@ p {
 
 /* Conteneur du formulaire */
 .form-container {
-    display: none;
     background-color: white;
     padding: 40px;
     border-radius: 10px;
@@ -324,4 +323,51 @@ button:hover {
     color: red; /* Couleur rouge pour le message d'erreur */
     font-weight: bold; /* Mettre en gras le texte */
     margin-bottom: 10px; /* Espace sous le message d'erreur */
+}
+
+.g-recaptcha {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cgu-modal {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.cgu-modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    height: 80%;
+    width: 60%;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#checkbox {
+    display: inline-block;
+    padding: 10px;
+    margin: 0;
+    width: auto;
+    height: auto;
 }
