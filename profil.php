@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Récupérer les informations de l'utilisateur depuis la base de données
-$query = $db->prepare("SELECT * FROM User WHERE idUser = ?");
+$query = $db->prepare("SELECT Nom, Prenom, Mail, Bio, Photo_de_Profil, Classe FROM User WHERE idUser = ?");
 $query->execute([$user_id]);
 $user = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -32,10 +32,22 @@ $courses_stmt = $db->prepare("
            (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'instructeur') AS tuteurs_inscrits
     FROM Inscription i
     JOIN Cours c ON i.idCours = c.idCours
-    WHERE i.idUser = ?
+    WHERE i.idUser = ? AND TIMESTAMP(c.Date, c.Heure) > NOW() - INTERVAL 5 HOUR
 ");
 $courses_stmt->execute([$user_id]);
 $user_courses = $courses_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$old_courses_stmt = $db->prepare("
+    SELECT c.*, i.role,
+           (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'eleve') AS eleves_inscrits,
+           (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'instructeur') AS tuteurs_inscrits
+    FROM Inscription i
+    JOIN Cours c ON i.idCours = c.idCours
+    WHERE i.idUser = ? AND TIMESTAMP(c.Date, c.Heure) <= NOW() - INTERVAL 5 HOUR
+");
+$old_courses_stmt->execute([$user_id]);
+$old_courses = $old_courses_stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -112,26 +124,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         .profile-container {
             margin-top: 30px;
         }
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-title {
-            color: #0061A0;
-            font-weight: bold;
-        }
+        
+       
         .profile-img-small {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 5px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.row {
+    margin: 0 -15px; /* Espacement entre les colonnes */
+}
+
+.col-md-6 {
+    padding: 15px; /* Espacement intérieur des colonnes */
+}
+
+@media (max-width: 768px) {
+    .col-md-6 {
+        flex: 0 1 100%; /* Une seule colonne par ligne sur petit écran */
+        max-width: 100%;
     }
+}
+
+    
+
+
     </style>
 </head>
 <body>
@@ -139,6 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <!-- Profil -->
     <div class="container text-center mt-5">
         <h1><?php echo htmlspecialchars($user['Prenom']) . " " . htmlspecialchars($user['Nom']); ?></h1>
+        <br>
         <?php 
         if (!empty($user['Photo_de_Profil'])) {
             // Utiliser la photo de profil si elle existe
@@ -149,8 +187,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
         ?>
         <img src="<?php echo $image_src; ?>" class="profile-img" alt="Photo de profil">
+        <br>
+        <br>
+
         <p><?php echo htmlspecialchars($user['Bio'] ?? ''); ?></p>
         <p><strong>Email :</strong> <?php echo htmlspecialchars($user['Mail']); ?></p>
+        <p><strong>Classe :</strong> <?php echo htmlspecialchars($user['Classe'] ?? 'Non spécifiée'); ?></p>
+
 
         <button id="edit-profile-btn" class="btn btn-primary" onclick="openEditProfileModal()">Modifier le profil</button>
         
@@ -232,6 +275,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         <?php endif; ?>
     </div>
 </div>
+<h3 class="mb-4 text-center">Anciens Cours</h3>
+<div class="row">
+    <?php if (!empty($old_courses)): ?>
+        <?php foreach ($old_courses as $course): ?>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <!-- Titre et informations de base -->
+                        <h5 class="card-title"><?php echo htmlspecialchars($course['Titre']); ?></h5>
+                        <p><strong>Date :</strong> <?php echo htmlspecialchars($course['Date']); ?> à <?php echo htmlspecialchars($course['Heure']); ?></p>
+                        <p><strong>Rôle :</strong> <?php echo $course['role'] === 'instructeur' ? 'Tuteur' : 'Élève'; ?></p>
+
+                        <!-- Section des élèves inscrits -->
+                        <p><strong>Élèves inscrits :</strong> <?php echo htmlspecialchars($course['eleves_inscrits']); ?> / <?php echo htmlspecialchars($course['Taille']); ?></p>
+                        <div class="profile-container mb-3">
+                            <?php
+                            $eleve_stmt = $db->prepare("SELECT u.Photo_de_Profil, u.idUser 
+                                                        FROM Inscription i
+                                                        JOIN User u ON i.idUser = u.idUser
+                                                        WHERE i.idCours = ? AND i.role = 'eleve'");
+                            $eleve_stmt->execute([$course['idCours']]);
+                            $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($eleves as $eleve): ?>
+                                <a href="profil_public.php?id=<?php echo $eleve['idUser']; ?>">
+                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
+                                         class="profile-img-small" 
+                                         alt="Profil Élève"
+                                         title="Voir le profil">
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <!-- Section des tuteurs inscrits -->
+                        <p><strong>Tuteurs inscrits :</strong> <?php echo htmlspecialchars($course['tuteurs_inscrits']); ?> / 1</p>
+                        <div class="profile-container mb-3">
+                            <?php
+                            $tuteur_stmt = $db->prepare("SELECT u.Photo_de_Profil, u.idUser 
+                                                         FROM Inscription i
+                                                         JOIN User u ON i.idUser = u.idUser
+                                                         WHERE i.idCours = ? AND i.role = 'instructeur'");
+                            $tuteur_stmt->execute([$course['idCours']]);
+                            $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($tuteurs as $tuteur): ?>
+                                <a href="profil_public.php?id=<?php echo $tuteur['idUser']; ?>">
+                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
+                                         class="profile-img-small" 
+                                         alt="Profil Tuteur"
+                                         title="Voir le profil">
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-center">Aucun ancien cours trouvé.</p>
+    <?php endif; ?>
+</div>
+
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -270,7 +373,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             </div>
         </div>
     </div>
-</div>*
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

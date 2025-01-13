@@ -1,4 +1,15 @@
 <?php
+// Inclusion de la connexion à la base de données
+require 'db_connection.php';
+
+// Vérification de connexion utilisateur
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Récupération des informations utilisateur connecté
+
 // Récupérer l'ID de l'utilisateur connecté
 $user_id = $_SESSION['user_id'];
 
@@ -7,6 +18,33 @@ $statement = $db->prepare("SELECT * FROM User WHERE idUser = ?");
 $statement->execute([$user_id]);
 $user = $statement->fetch(PDO::FETCH_ASSOC);
 ?>
+
+<html lang="fr">
+<head>
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-link:hover {
+            color: #004f80 !important; /* Couleur au survol */
+        }
+
+        .navbar .btn-outline-primary {
+            transition: all 0.3s ease;
+        }
+
+        .navbar .btn-outline-primary:hover {
+            background-color: #0061A0;
+            color: white;
+        }
+    </style>
 
 <!-- Navbar -->
 <link rel="icon" href="images/logo.png">
@@ -28,12 +66,18 @@ $user = $statement->fetch(PDO::FETCH_ASSOC);
                 <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="contact.php">Contact</a> </li>
                 <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a> </li>
                 <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a> </li>
+                <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="chat.php">Chat</a> </li>
+                <li class="nav-item"> <a class="nav-link text-dark fw-semibold" href="evaluation.php">Avis</a> </li>
+
+
+
 
                 <!-- Section de recherche -->
                 <li class="nav-item d-flex align-items-center ms-3">
                     <form class="d-flex" action="search_profiles.php" method="GET" style="margin-bottom: 0;">
                         <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
-                        <button class="btn btn-outline-primary" type="submit">Rechercher</button>
+                        <a class="btn btn-outline-primary" type="submit">Rechercher</a>
+
                     </form>
                 </li>
 
@@ -57,7 +101,7 @@ $user = $statement->fetch(PDO::FETCH_ASSOC);
                 </li>
 
                 <li class="nav-item ms-3">
-                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.php">Déconnexion</a>
+                    <a class="btn btn-outline-primary"  href="login.php">Déconnexion</a>
                 </li>
             </ul>
         </div>

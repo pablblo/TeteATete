@@ -134,23 +134,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unregister_course']))
 
 // Récupération des cours
 try {
-    $stmt = $db->query("SELECT c.*, 
-                               (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'eleve') AS eleves_inscrits,
-                               (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'instructeur') AS tuteurs_inscrits
-                        FROM Cours c");
+    // Exécuter la requête SQL pour récupérer les cours
+    $stmt = $db->query("
+        SELECT c.*, 
+               (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'eleve') AS eleves_inscrits,
+               (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'instructeur') AS tuteurs_inscrits
+        FROM Cours c
+        WHERE TIMESTAMP(c.Date, c.Heure) > NOW() - INTERVAL 5 HOUR
+    ");
+
+    // Vérifiez si la requête a été correctement exécutée
+    if (!$stmt) {
+        throw new Exception("Échec de l'exécution de la requête SQL.");
+    }
+
+    // Récupérer les résultats
     $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Si aucun cours trouvé, initialisez un tableau vide
+    if (!$courses) {
+        $courses = [];
+    }
 
     // Récupération des inscriptions pour chaque cours
     $inscriptions = [];
     foreach ($courses as $course) {
-        $inscription_stmt = $db->prepare("SELECT DISTINCT u.Photo_de_Profil
-                                          FROM Inscription i
-                                          JOIN User u ON i.idUser = u.idUser
-                                          WHERE i.idCours = ?");
+        $inscription_stmt = $db->prepare("
+            SELECT DISTINCT u.Photo_de_Profil
+            FROM Inscription i
+            JOIN User u ON i.idUser = u.idUser
+            WHERE i.idCours = ?
+        ");
         $inscription_stmt->execute([$course['idCours']]);
         $inscriptions[$course['idCours']] = $inscription_stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+} catch (PDOException $e) {
+    // Gérer les erreurs PDO
+    die("Erreur PDO : " . $e->getMessage());
 } catch (Exception $e) {
+    // Gérer les erreurs générales
     die("Erreur : " . $e->getMessage());
 }
 
@@ -160,7 +182,8 @@ $date_filter = isset($_GET['date']) ? $_GET['date'] : '';
 $participants_filter = isset($_GET['participants']) ? $_GET['participants'] : '';
 
 // Construction dynamique de la clause WHERE
-$where_clauses = [];
+// Ajout de la condition temporelle à toutes les requêtes
+$where_clauses[] = "TIMESTAMP(c.Date, c.Heure) > NOW() - INTERVAL 5 HOUR";
 $params = [];
 
 if (!empty($search)) {

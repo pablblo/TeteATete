@@ -31,14 +31,49 @@ if (!$profile_user) {
     die("Erreur : Utilisateur non trouvé");
 }
 
-// Récupérer la moyenne des évaluations
-$queryMoyenne = $db->prepare("
-    SELECT AVG(Note) as moyenne
+// Récupérer les moyennes par rôle
+$queryMoyennes = $db->prepare("
+    SELECT Tuteur_ou_Eleve, AVG(Note) AS moyenne
     FROM Evaluation
     WHERE idUserReceveur = ?
+    GROUP BY Tuteur_ou_Eleve
 ");
-$queryMoyenne->execute([$profile_id]);
-$moyenne = $queryMoyenne->fetch(PDO::FETCH_ASSOC)['moyenne'] ?? 0;
+$queryMoyennes->execute([$profile_id]);
+$moyennes = $queryMoyennes->fetchAll(PDO::FETCH_ASSOC);
+
+$moyenneEleve = 0;
+$moyenneTuteur = 0;
+foreach ($moyennes as $moyenne) {
+    if ($moyenne['Tuteur_ou_Eleve'] == 0) {
+        $moyenneEleve = $moyenne['moyenne'];
+    } elseif ($moyenne['Tuteur_ou_Eleve'] == 1) {
+        $moyenneTuteur = $moyenne['moyenne'];
+    }
+}
+
+$queryEvaluations = $db->prepare("
+    SELECT
+        e.Note,
+        e.Commentaire,
+        u.Prenom,
+        u.Nom,
+        u.Photo_de_Profil,
+        i.role AS roleAuteur,
+        c.Titre AS coursTitre
+    FROM
+        Evaluation e
+    INNER JOIN
+        User u ON e.idUserAuteur = u.idUser
+    INNER JOIN
+        Inscription i ON e.idUserAuteur = i.idUser AND e.idCours = i.idCours
+    INNER JOIN
+        Cours c ON e.idCours = c.idCours
+    WHERE
+        e.idUserReceveur = ?
+");
+$queryEvaluations->execute([$profile_id]);
+$evaluations = $queryEvaluations->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Récupérer uniquement les cours auxquels l'utilisateur est inscrit
 $courses_stmt = $db->prepare("
@@ -47,10 +82,21 @@ $courses_stmt = $db->prepare("
            (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'instructeur') AS tuteurs_inscrits
     FROM Inscription i
     JOIN Cours c ON i.idCours = c.idCours
-    WHERE i.idUser = ?
+    WHERE i.idUser = ? AND TIMESTAMP(c.Date, c.Heure) > NOW() - INTERVAL 5 HOUR
 ");
 $courses_stmt->execute([$profile_id]);
 $user_courses = $courses_stmt->fetchAll(PDO::FETCH_ASSOC);
+$old_courses_stmt = $db->prepare("
+    SELECT c.*, i.role,
+           (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'eleve') AS eleves_inscrits,
+           (SELECT COUNT(*) FROM Inscription WHERE idCours = c.idCours AND role = 'instructeur') AS tuteurs_inscrits
+    FROM Inscription i
+    JOIN Cours c ON i.idCours = c.idCours
+    WHERE i.idUser = ? AND TIMESTAMP(c.Date, c.Heure) <= NOW() - INTERVAL 5 HOUR
+");
+$old_courses_stmt->execute([$profile_id]);
+$old_courses = $old_courses_stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Récupération des informations utilisateur connecté
 $user_id = $_SESSION['user_id'];
@@ -246,7 +292,6 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<!DOCTYPE html>
 <html lang="fr">
 <head>
     <link rel="icon" type="image/x-icon" href="images/logo.png">
@@ -281,54 +326,95 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: #0061A0;
             font-weight: bold;
         }
+        
+
+        .evaluation-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.evaluation-card img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+.evaluation-card .evaluation-content {
+    flex: 1;
+}
+.evaluation-card h5 {
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+}
+.evaluation-card p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+.evaluation-card .note {
+    font-size: 16px;
+    font-weight: 500;
+    color: #455eb5;
+}
+.notes-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.section-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #343a40;
+    margin-bottom: 15px;
+}
+
+.note-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.note-item h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #0061A0;
+}
+
+.note-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+.stars {
+    font-size: 1.5em;
+    color: gold;
+    margin-left: 10px;
+}
+
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="page_principale.php">
-            <img src="images/logo.png" alt="TAT Logo" style="height: 100px; width: 100px;" class="me-2">
-            <span style="font-size: 20px; font-weight: bold; color: #0061A0;"></span>
-        </a>
-        <!-- Toggler for mobile view -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Navbar Links -->
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="#">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="FAQ.php">FAQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark fw-semibold" href="page_principale.php">Cours</a>
-                </li>
-                <!-- Section de recherche -->
-                <form class="d-flex ms-3" action="search_profiles.php" method="GET">
-                    <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
-                    <button class="btn btn-outline-primary" type="submit">Rechercher</button>
-                </form>
-                <!-- Profil utilisateur connecté -->
-                <li class="nav-item ms-3 d-flex align-items-center">
-                    <a class="nav-link d-flex align-items-center" href="profil.php">
-                        <img src="data:image/jpeg;base64,<?php echo base64_encode($user['Photo_de_Profil']); ?>"
-                             alt="Profil"
-                             class="rounded-circle"
-                             style="object-fit: cover; height: 40px; width: 40px; border: 2px solid #ddd;">
-                    </a>
-                </li>
-                <li class="nav-item ms-3">
-                    <a class="btn btn-primary" style="background-color: #E2EAF4; color: black;" href="login.php">Déconnexion</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    <?php include 'navbar.php'; ?>
+
+          
 
     <!-- Contenu du profil -->
     <div class="container mt-5">
@@ -340,15 +426,82 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                      alt="Photo de profil">
                 <h2><?php echo htmlspecialchars($profile_user['Prenom'] . " " . $profile_user['Nom']); ?></h2>
                 <p class="text-muted"><?php echo htmlspecialchars($profile_user['Mail']); ?></p>
-                <div class="mt-3">
-                    <h4>Note moyenne</h4>
-                    <p class="h3"><?php echo $moyenne > 0 ? number_format($moyenne, 1) . '/5' : 'Pas encore noté'; ?></p>
+                <br>
+                <div class="notes-container">
+                    
+    <h3 class="section-title">Notes</h3>
+    <div class="note-details">
+        <div class="note-item">
+            <h4>En tant qu'élève :</h4>
+            <p>
+                <span class="note-value">
+                    <?php echo $moyenneEleve > 0 ? number_format($moyenneEleve, 1) . '/5' : 'Pas encore noté'; ?>
+                </span>
+                <?php if ($moyenneEleve > 0): ?>
+                    <span class="stars">
+                        <?php 
+                        // Afficher des étoiles en fonction de la note
+                        $stars = round($moyenneEleve);
+                        echo str_repeat('★', $stars) . str_repeat('☆', 5 - $stars);
+                        ?>
+                    </span>
+                <?php endif; ?>
+            </p>
+        </div>
+        <div class="note-item">
+            <h4>En tant que tuteur :</h4>
+            <p>
+                <span class="note-value">
+                    <?php echo $moyenneTuteur > 0 ? number_format($moyenneTuteur, 1) . '/5' : 'Pas encore noté'; ?>
+                </span>
+                <?php if ($moyenneTuteur > 0): ?>
+                    <span class="stars">
+                        <?php 
+                        $stars = round($moyenneTuteur);
+                        echo str_repeat('★', $stars) . str_repeat('☆', 5 - $stars);
+                        ?>
+                    </span>
+                <?php endif; ?>
+            </p>
+        </div>
+    </div>
+</div>
+
+                 <div class="mt-5">
+        <h3>Commentaires</h3>
+        <?php if (!empty($evaluations)): ?>
+            <?php foreach ($evaluations as $evaluation): ?>
+                <div class="evaluation-card d-flex">
+                    <img                                                              class="profile-img-small" 
+                    src="data:image/jpeg;base64,<?php echo base64_encode($evaluation['Photo_de_Profil']); ?>" alt="Photo de l'auteur">
+                    <div>
+                        <h5><?php echo htmlspecialchars($evaluation['Prenom'] . ' ' . $evaluation['Nom']); ?> 
+                            <small class="text-muted">(<?php echo $evaluation['roleAuteur']; ?>)</small>
+                        </h5>
+                        <p><strong>Cours :</strong> <?php echo htmlspecialchars($evaluation['coursTitre']); ?></p>
+                        <p><strong>Note :</strong> 
+    <?php echo $evaluation['Note']; ?>/5
+    <span class="stars">
+        <?php
+        // Afficher des étoiles en fonction de la note
+        $stars = (int)$evaluation['Note'];
+        echo str_repeat('★', $stars) . str_repeat('☆', 5 - $stars);
+        ?>
+    </span>
+</p>
+                        <p><strong>Commentaire :</strong> <?php echo htmlspecialchars($evaluation['Commentaire']); ?></p>
                     </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Aucune évaluation reçue pour le moment.</p>
+        <?php endif; ?>
+    </div>
             </div>
 
             <!-- Bio et autres informations -->
             <div class="col-md-8">
-                <div class="card mb-4">
+                <div class="card mb-0">
                     <div class="card-body">
                         <h3 class="card-title">À propos</h3>
                         <p><?php echo nl2br(htmlspecialchars($profile_user['Bio'])); ?></p>
@@ -443,9 +596,72 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
                     </div>
                 </div>
+                <h3 class="mb-4 text-center">Anciens Cours</h3>
+<div class="row">
+    <?php if (!empty($old_courses)): ?>
+        <?php foreach ($old_courses as $course): ?>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <!-- Titre et informations de base -->
+                        <h5 class="card-title"><?php echo htmlspecialchars($course['Titre']); ?></h5>
+                        <p><strong>Date :</strong> <?php echo htmlspecialchars($course['Date']); ?> à <?php echo htmlspecialchars($course['Heure']); ?></p>
+                        <p><strong>Rôle :</strong> <?php echo $course['role'] === 'instructeur' ? 'Tuteur' : 'Élève'; ?></p>
+
+                        <!-- Section des élèves inscrits -->
+                        <p><strong>Élèves inscrits :</strong> <?php echo htmlspecialchars($course['eleves_inscrits']); ?> / <?php echo htmlspecialchars($course['Taille']); ?></p>
+                        <div class="profile-container mb-3">
+                            <?php
+                            $eleve_stmt = $db->prepare("SELECT u.Photo_de_Profil, u.idUser 
+                                                        FROM Inscription i
+                                                        JOIN User u ON i.idUser = u.idUser
+                                                        WHERE i.idCours = ? AND i.role = 'eleve'");
+                            $eleve_stmt->execute([$course['idCours']]);
+                            $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($eleves as $eleve): ?>
+                                <a href="profil_public.php?id=<?php echo $eleve['idUser']; ?>">
+                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
+                                         class="profile-img-small" 
+                                         alt="Profil Élève"
+                                         title="Voir le profil">
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <!-- Section des tuteurs inscrits -->
+                        <p><strong>Tuteurs inscrits :</strong> <?php echo htmlspecialchars($course['tuteurs_inscrits']); ?> / 1</p>
+                        <div class="profile-container mb-3">
+                            <?php
+                            $tuteur_stmt = $db->prepare("SELECT u.Photo_de_Profil, u.idUser 
+                                                         FROM Inscription i
+                                                         JOIN User u ON i.idUser = u.idUser
+                                                         WHERE i.idCours = ? AND i.role = 'instructeur'");
+                            $tuteur_stmt->execute([$course['idCours']]);
+                            $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($tuteurs as $tuteur): ?>
+                                <a href="profil_public.php?id=<?php echo $tuteur['idUser']; ?>">
+                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
+                                         class="profile-img-small" 
+                                         alt="Profil Tuteur"
+                                         title="Voir le profil">
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-center">Aucun ancien cours trouvé.</p>
+    <?php endif; ?>
+</div>
+
+
             </div>
         </div>
     </div>
+
+
     <br>    
     <br>
     <br>

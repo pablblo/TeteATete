@@ -1,6 +1,7 @@
 <?php
 require 'db_connection.php'; // Connexion à la base de données
 
+
 // Vérifier s'il y a déjà un message d'erreur
 $error_message = '';
 if (isset($_SESSION['error_message'])) {
