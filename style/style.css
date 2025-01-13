@@ -1,3 +1,9 @@
+* {
+    box-sizing: border-box; /* Ensures widths include padding and border */
+    margin: 0;
+    padding: 0;
+}
+
 /* Styles généraux pour la page */
 body, html {
     margin: 0;
@@ -35,16 +41,27 @@ body::before {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Important pour placer tous les éléments en haut de la page */
-    min-height: 100vh;  /* Assure que tout l'écran est utilisé */
+    justify-content: flex-start;
+    min-height: 100vh;
     z-index: 2;
     position: relative;
+    gap: 50px;
+}
+
+.message {
+    color: #333;
+}
+
+/* Specific styling for error messages */
+.message.error {
+    color: #f44336; /* Red text for error */
+    font-weight: bold; /* Make the error message stand out */
 }
 
 /* Conteneur du logo, titre et devise */
 .header-container {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 
@@ -58,14 +75,15 @@ body::before {
 h1 {
     font-size: 46px;
     color: #000;
-    margin-top: 0px; /* Enlever toute marge supérieure pour rapprocher du logo */
-    margin-bottom: 5px; /* Ajuste cette valeur pour contrôler l'espacement sous le titre */
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 p {
     font-size: 28px;
     color: #0061A0;
-    margin-top: 0px; /* Supprimer la marge supérieure */
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 /* Conteneur du formulaire */
@@ -74,7 +92,7 @@ p {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    width: 320px;
+    width: 400px;
     position: relative;
     z-index: 2;
 }
@@ -305,8 +323,49 @@ button:hover {
     margin-left: 10px;
 }
 
-.error-message {
-    color: red; /* Couleur rouge pour le message d'erreur */
-    font-weight: bold; /* Mettre en gras le texte */
-    margin-bottom: 10px; /* Espace sous le message d'erreur */
+.g-recaptcha {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cgu-modal {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.cgu-modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+    height: 80%;
+    width: 60%;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#checkbox {
+    display: inline-block;
+    padding: 10px;
+    margin: 0;
+    width: auto;
+    height: auto;
 }

@@ -1,9 +1,3 @@
-<?php 
-/**
-* Vue : liste des utilisateurs inscrits
-*/
-?>
-
 <p><?php echo $entete; ?></p>
 
 <table>

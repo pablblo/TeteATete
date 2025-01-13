@@ -1,23 +1,40 @@
 <?php
-
-/**
- * MVC :
- * - index.php : identifie le routeur à appeler en fonction de l'url
- * - Contrôleur : Crée les variables, élabore leurs contenus, identifie la vue et lui envoie les variables
- * - Modèle : contient les fonctions liées à la BDD et appelées par les contrôleurs
- * - Vue : contient ce qui doit être affiché
- **/
-
-// Activation des erreurs
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-if(isset($_GET['cible']) && !empty($_GET['cible'])) {
-    $url = $_GET['cible'];
+session_start();
+
+include('controleur/functions.php');
+include('vue/functions.php');
+
+// Dynamically generate the list of valid controllers from the 'controleur' directory
+$valid_controllers = array_filter(scandir('controleur'), function($file) {
+    // Only include PHP files (excluding . and ..)
+    return strpos($file, '.php') !== false && $file != 'functions.php';
+});
+
+// Remove the .php extension from each file name
+$valid_controllers = array_map(function($file) {
+    return basename($file, '.php');
+}, $valid_controllers);
+
+// Sanitize input and prevent directory traversal
+if (isset($_GET['cible']) && !empty($_GET['cible'])) {
+    $url = basename($_GET['cible']);  // Strip any directory path elements
+    if (!in_array($url, $valid_controllers)) {
+        $url = 'fichiers';  // Default fallback if the controller is not valid
+    }
 } else {
-    $url = 'fichiers';
+    $url = 'fichiers';  // Default value if 'cible' is not set
 }
 
-include('controleur/' . $url . '.php');
-
+// Verify the file exists before including
+$controller_file = 'controleur/' . $url . '.php';
+if (file_exists($controller_file)) {
+    include($controller_file);
+} else {
+    // Handle the case where the file doesn't exist, perhaps redirect or show a 404 page
+    header("HTTP/1.0 404 Not Found");
+    echo "Page not found!";
+}
 ?>
