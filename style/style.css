@@ -48,10 +48,14 @@ body::before {
     gap: 50px;
 }
 
-.error-message {
-    color: red; /* Couleur rouge pour le message d'erreur */
-    font-weight: bold; /* Mettre en gras le texte */
-    margin-bottom: 10px; /* Espace sous le message d'erreur */
+.message {
+    color: #333;
+}
+
+/* Specific styling for error messages */
+.message.error {
+    color: #f44336; /* Red text for error */
+    font-weight: bold; /* Make the error message stand out */
 }
 
 /* Conteneur du logo, titre et devise */
@@ -317,12 +321,6 @@ button:hover {
 
 .post-announcement-btn span {
     margin-left: 10px;
-}
-
-.error-message {
-    color: red; /* Couleur rouge pour le message d'erreur */
-    font-weight: bold; /* Mettre en gras le texte */
-    margin-bottom: 10px; /* Espace sous le message d'erreur */
 }
 
 .g-recaptcha {

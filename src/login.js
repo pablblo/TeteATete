@@ -18,13 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle registration form submission and modal interactions
-    const registrationForm = document.getElementById("registrationForm");
+    const registerContainer = document.getElementById("register-container");
     const cguModal = document.getElementById("myCGUModal");
 
-    if (registrationForm && cguModal) {
-        registrationForm.addEventListener("submit", event => {
-            event.preventDefault();
-            toggleModal("myCGUModal", true);
+    if (registerContainer && cguModal) {
+        registerContainer.addEventListener("click", event => {
+            if (event.target.id === "myBtn") {
+                event.preventDefault();
+                toggleModal("myCGUModal", true);
+            }
         });
         window.addEventListener("click", event => {
             if (event.target === cguModal) {

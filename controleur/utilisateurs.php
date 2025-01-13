@@ -7,6 +7,7 @@ $function = getRequestParameter('function', 'loginPage');
 switch ($function) {
     case 'login':
         $vue = "login";
+        $refreshLocation = "index.php?cible=utilisateurs&function=login";
         
         // Vérifier s'il y a déjà un message d'erreur
         $message = getMessage();
@@ -18,27 +19,21 @@ switch ($function) {
                 case 'login':
                     // Vérifier le reCAPTCHA
                     if (empty($_POST['g-recaptcha-response'])) {
-                        $_SESSION['message'] = "Veuillez valider le reCAPTCHA.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Veuillez valider le reCAPTCHA.", $refreshLocation);
                     }
 
                     // Valider le reCAPTCHA
                     $recaptchaResponse = $_POST['g-recaptcha-response'];
                     if (!validerRecaptcha($recaptchaResponse, '6Lc9KrMqAAAAAJpdJP2G8GWD0MDD87W0SXaFV5GV')) {
-                        $_SESSION['message'] = "Échec de la validation du reCAPTCHA. Veuillez réessayer.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Échec de la validation du reCAPTCHA. Veuillez réessayer.", $refreshLocation);
                     }
 
-                    $email = trim($_POST['login-email']);
-                    $password = trim($_POST['login-password']);
+                    $email = clean_input($_POST['login-email']);
+                    $password = clean_input($_POST['login-password']);
                 
                     // Validation de l'email
                     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $_SESSION['message'] = "Adresse e-mail invalide.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Adresse e-mail invalide.", $refreshLocation);
                     }
                     
                     // Recherche l'utilisateur dans la base de données
@@ -60,20 +55,16 @@ switch ($function) {
                             header("Location: page_principale.php");
                         }
                     } else {
-                        $_SESSION['message'] = "Identifiants incorrects. Veuillez réessayer."; // Message d'erreur
-                        header("Location: index.php?cible=utilisateurs&function=login"); // Redirection vers le formulaire de connexion
+                        redirectWithMessage("Erreur : Identifiants incorrects. Veuillez réessayer.", $refreshLocation);
                     }
-                    exit();
                     break;
                 
                 case 'mdpo':
-                    $email = trim($_POST['mdpo-email']);
+                    $email = clean_input($_POST['mdpo-email']);
 
                     // Validation de l'email
                     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $_SESSION['message'] = "Adresse e-mail invalide.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Adresse e-mail invalide.", $refreshLocation);
                     }
 
                     // Vérifiez si l'email existe dans la base de données
@@ -82,50 +73,41 @@ switch ($function) {
                     if ($user) {
                         $_SESSION['message'] = mdpResetEmail($db, $email);
                     } else {
-                        $_SESSION['message'] = "Aucun compte trouvé avec cette adresse e-mail.";
+                        $_SESSION['message'] = "Erreur : Aucun compte trouvé avec cette adresse e-mail.";
                     }
-                    header("Location: index.php?cible=utilisateurs&function=login");
-                    exit();
+                    redirectWithMessage($_SESSION['message'], $refreshLocation);
                     break;
 
                 case 'register':
                     // Vérifier le reCAPTCHA
                     if (empty($_POST['g-recaptcha-response'])) {
-                        $_SESSION['message'] = "Veuillez valider le reCAPTCHA.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Veuillez valider le reCAPTCHA.", $refreshLocation);
                     }
 
                     // Valider le reCAPTCHA
                     $recaptchaResponse = $_POST['g-recaptcha-response'];
                     if (!validerRecaptcha($recaptchaResponse, '6Lf8HLMqAAAAAMavW7tlUiZ3S8UkoqCwglEZuBnn')) {
-                        $_SESSION['message'] = "Échec de la validation du reCAPTCHA. Veuillez réessayer.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Échec de la validation du reCAPTCHA. Veuillez réessayer.", $refreshLocation);
                     }
 
-                    $nom = trim($_POST['register-nom']);
-                    $prenom = trim($_POST['register-prenom']);
-                    $email = trim($_POST['register-email']);
-                    $password = trim($_POST['register-password']);
-                    $classe = trim($_POST['register-classe']);
+                    $nom = clean_input($_POST['register-nom']);
+                    $prenom = clean_input($_POST['register-prenom']);
+                    $email = clean_input($_POST['register-email']);
+                    $password = clean_input($_POST['register-password']);
+                    $classe = clean_input($_POST['register-classe']);
 
                     // Validation : Mot de passe
                     if (strlen($password) < 8 || !preg_match('/[0-9]/', $password) || !preg_match('/[\W]/', $password)) {
-                        $_SESSION['message'] = "Le mot de passe doit contenir au moins 8 caractères, un chiffre, et un caractère spécial.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Le mot de passe doit contenir au moins 8 caractères, un chiffre, et un caractère spécial.", $refreshLocation);
                     }
 
                     // Recherche l'utilisateur dans la base de données
                     $user = rechercheParMail($db, $email);
                     if (!empty($user)) { // Explicitly check if a user exists
-                        $_SESSION['message'] = "Cet email est déjà utilisé.";
-                        header("Location: index.php?cible=utilisateurs&function=login");
-                        exit();
+                        redirectWithMessage("Erreur : Cet email est déjà utilisé.", $refreshLocation);
                     }
                     
-                    //Insertion utilisateur
+                    // Insertion utilisateur
                     $password = password_hash($password, PASSWORD_BCRYPT);
                     $utilisateur = [
                         'nom' => $nom,
@@ -135,12 +117,11 @@ switch ($function) {
                         'classe' => $classe
                     ];
                     if (ajouteUtilisateur($db, $utilisateur)){
-                        $_SESSION['message'] = "Inscription a reussi.";
+                        $_SESSION['message'] = "Inscription a réussi.";
                     } else {
-                        $_SESSION['message'] = "Inscription a echoue.";
+                        $_SESSION['message'] = "Erreur : Inscription a échoué.";
                     }
-                    header("Location: index.php?cible=utilisateurs&function=login");
-                    exit();
+                    redirectWithMessage($_SESSION['message'], $refreshLocation);
                     break;
             }
         }

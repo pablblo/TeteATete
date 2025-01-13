@@ -8,6 +8,19 @@ function getRequestParameter($key, $default = "")
     return isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] : $default;
 }
 
+function redirectWithMessage($message, $location) {
+    $_SESSION['message'] = $message;
+    header("Location: $location");
+    exit();
+}
+
+function clean_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
+
 function getMessage() {
     if (isset($_SESSION['message'])) {
         $message = $_SESSION['message'];
