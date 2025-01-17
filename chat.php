@@ -109,7 +109,7 @@
         const userId = 1; // Remplacez avec l'idUser connecté
 
         // Récupération des cours de l'utilisateur via l'API
-        fetch(`http://localhost/APP2/get_courses.php?idUser=${userId}`)
+        fetch(`http://localhost/TeteAtTete/get_courses.php?idUser=${userId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur HTTP : ' + response.status);
