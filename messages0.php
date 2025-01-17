@@ -143,7 +143,7 @@
     <div id="messages"></div>
 
     <div id="send-message-form">
-        <form method="POST" action="http://localhost/APP2/send_message.php" style="display: flex; width: 100%;">
+        <form method="POST" action="http://localhost/TeteATete/send_message.php" style="display: flex; width: 100%;">
             <textarea name="message" id="message-input" placeholder="Écrivez votre message..." rows="3" required></textarea>
             <input type="hidden" name="idCours" id="course-id">
             <button type="submit" class="button-36">Envoyer</button>
@@ -166,7 +166,7 @@
 
         // Charger les messages depuis l'API
         function loadMessages() {
-            fetch(`http://localhost/APP2/messages.php?idCours=${courseId}`)
+            fetch(`http://localhost/TeteATete/messages.php?idCours=${courseId}`)
                 .then(response => response.json())
                 .then(messages => {
                     const messagesContainer = document.getElementById('messages');
@@ -201,7 +201,7 @@
 
         // Charger les messages initialement
         loadMessages();
-        fetch(`http://localhost/APP2/course_name.php?idCours=${courseId}`)
+        fetch(`http://localhost/TeteATete/course_name.php?idCours=${courseId}`)
     .then(response => response.json())
     .then(data => {
         if (data && data.Titre) {
