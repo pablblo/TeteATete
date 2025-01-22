@@ -43,7 +43,7 @@ try {
             $stmt->execute();
 
             // Rediriger vers la page des messages après l'insertion
-            header("Location: http://localhost/APP2/messages0.php?idCours=$idCours");
+            header("Location: http://localhost/TeteATete/messages0.php?idCours=$idCours");
             exit();
         } else {
             die("Paramètres manquants.");
