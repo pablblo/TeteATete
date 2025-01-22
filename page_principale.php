@@ -234,58 +234,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Page Principale</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .card {
-            margin-bottom: 30px;
-        }
-        .card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-title {
-            color: #0061A0;
-            font-weight: bold;
-        }
-        .profile-img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .profile-container {
-            display: flex;
-            align-items: center;
-        }
-        #create-course-section {
-            display: none; /* Masqué par défaut */
-        }
-        .navbar .nav-link {
-            transition: color 0.3s ease;
-        }
-
-        .navbar .nav-link:hover {
-            color: #004f80 !important; /* Couleur au survol */
-        }
-
-        .navbar .btn-outline-primary {
-            transition: all 0.3s ease;
-        }
-
-        .navbar .btn-outline-primary:hover {
-            background-color: #0061A0;
-            color: white;
-        }
-
-        .text-danger {
-            font-size: 16px;
-            font-weight: bold;
-            color: red;
-            text-align: center;
-        
-}
-
-
-    </style>
+    <link rel="stylesheet" href="style/style_pageprincipale.css">
 </head>
 <body>
     <?php include 'navbar.php'; ?>

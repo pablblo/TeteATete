@@ -1,0 +1,106 @@
+/* Navbar */
+.navbar .nav-link:hover {
+    color: #004f80 !important;
+}
+
+.navbar .btn-outline-primary:hover {
+    background-color: #0061A0;
+    color: white;
+}
+
+/* Section Qui sommes-nous */
+.about-us {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px 20px;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.about-us .about-text {
+    max-width: 60%;
+}
+
+.about-us h1 {
+    font-size: 2.5rem;
+    color: #0061A0;
+    font-weight: bold;
+}
+
+.about-us h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.about-us p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.about-us img {
+    max-width: 30%;
+    border-radius: 10px;
+    border-radius: 50%; /* Rendre l'image circulaire */
+    object-fit: cover; /* Assurer que l'image s'ajuste correctement */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Section FAQ */
+.faq {
+    padding: 40px 20px;
+}
+
+.faq h2 {
+    font-size: 2.5rem;
+    color: #0061A0;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.faq-item {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.faq-item h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.faq-item h4 {
+    font-size: 1.2rem;
+    color: #0061A0;
+    margin-bottom: 5px;
+}
+
+.faq-item p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .about-us {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-us .about-text {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .about-us img {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+}

@@ -105,71 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de l'utilisateur</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #ddd;
-        }
-        .rating img {
-            width: 30px;
-            height: 30px;
-        }
-        .form-container {
-            display: none;
-            margin-top: 20px;
-        }
-        .profile-container {
-            margin-top: 30px;
-        }
-        
-       
-        .profile-img-small {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 5px;
-}
-
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-}
-
-.card:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.row {
-    margin: 0 -15px; /* Espacement entre les colonnes */
-}
-
-.col-md-6 {
-    padding: 15px; /* Espacement intérieur des colonnes */
-}
-
-@media (max-width: 768px) {
-    .col-md-6 {
-        flex: 0 1 100%; /* Une seule colonne par ligne sur petit écran */
-        max-width: 100%;
-    }
-}
-
-    
-
-
-    </style>
+    <link rel="stylesheet" href="style/style_profil.css">
 </head>
 <body>
     <?php include 'navbar.php'; ?>

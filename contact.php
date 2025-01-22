@@ -96,51 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Contactez-nous</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .card {
-            margin-bottom: 30px;
-        }
-        .card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-title {
-            color: #0061A0;
-            font-weight: bold;
-        }
-        .profile-img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .profile-container {
-            display: flex;
-            align-items: center;
-        }
-        .navbar .nav-link {
-            transition: color 0.3s ease;
-        }
-
-        .navbar .nav-link:hover {
-            color: #004f80 !important;
-        }
-
-        .navbar .btn-outline-primary {
-            transition: all 0.3s ease;
-        }
-
-        .navbar .btn-outline-primary:hover {
-            background-color: #0061A0;
-            color: white;
-        }
-        .text-danger {
-            font-size: 16px;
-            font-weight: bold;
-            color: red;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="style/style_contact.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -173,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="mb-3">
                 <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Envoyer</button>
         </form>

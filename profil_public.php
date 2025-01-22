@@ -299,116 +299,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil de <?php echo htmlspecialchars($profile_user['Prenom'] . ' ' . $profile_user['Nom']); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #ddd;
-        }
-        .profile-img-small {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid #ddd;
-        }
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            transition: box-shadow 0.3s ease;
-        }
-        .card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card-title {
-            color: #0061A0;
-            font-weight: bold;
-        }
-        
-
-        .evaluation-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 20px;
-    background: #f8f9fa;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-.evaluation-card img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ddd;
-}
-.evaluation-card .evaluation-content {
-    flex: 1;
-}
-.evaluation-card h5 {
-    margin: 0;
-    color: #333;
-    font-weight: 600;
-}
-.evaluation-card p {
-    margin: 5px 0;
-    color: #666;
-    font-size: 14px;
-}
-.evaluation-card .note {
-    font-size: 16px;
-    font-weight: 500;
-    color: #455eb5;
-}
-.notes-container {
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.section-title {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #343a40;
-    margin-bottom: 15px;
-}
-
-.note-details {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.note-item h4 {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #0061A0;
-}
-
-.note-value {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #333;
-}
-
-.stars {
-    font-size: 1.5em;
-    color: gold;
-    margin-left: 10px;
-}
-
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <link rel="stylesheet" href="style/style_profilpublic.css">
 </head>
 <body>
     <!-- Navbar -->
@@ -683,4 +574,4 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>
