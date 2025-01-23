@@ -76,8 +76,7 @@ $user = $statement->fetch(PDO::FETCH_ASSOC);
                 <li class="nav-item d-flex align-items-center ms-3">
                     <form class="d-flex" action="search_profiles.php" method="GET" style="margin-bottom: 0;">
                         <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
-                        <a class="btn btn-outline-primary" type="submit">Rechercher</a>
-
+                        <button class="btn btn-outline-primary" type="submit">Rechercher</button>
                     </form>
                 </li>
 
