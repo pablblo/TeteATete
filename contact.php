@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="style/style_contact.css">
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5"> <!-- Ajout de mb-5 pour la marge en bas -->
         <h2 class="text-center mb-4">Contactez-nous</h2>
 
         <?php if (!empty($success)): ?>

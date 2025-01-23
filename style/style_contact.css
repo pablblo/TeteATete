@@ -46,3 +46,7 @@
     color: red;
     text-align: center;
 }
+
+body {
+    padding-bottom: 70px; /* Ajout de padding en bas pour éviter que le contenu soit caché par le footer */
+}

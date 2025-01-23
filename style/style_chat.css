@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100%; /* Permet à la page de prendre 100% de la hauteur de la fenêtre */
+    padding-bottom: 70px; /* Ajout de padding en bas pour éviter que le contenu soit caché par le footer */
 }
 
 h1 {
