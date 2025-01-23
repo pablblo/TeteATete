@@ -46,3 +46,7 @@
     color: red;
     text-align: center;
 }
+
+footer {
+    position: static; /* Permet au footer de suivre le flux normal du document */
+}
