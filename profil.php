@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 </script>
 
 
-<footer class="bg-light text-center py-3 mt-5">
+<footer class="bg-light text-center py-3 mt-5 fixed-bottom">
         <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
         <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
             Conditions générales d'utilisation
