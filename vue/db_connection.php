@@ -17,6 +17,4 @@ try {
 
 ini_set('display_errors', 1);  // Enable error display
 error_reporting(E_ALL);        // Report all errors
-
-session_start();
 ?>
