@@ -17,8 +17,10 @@
     <div id="messages"></div>
 
     <div id="send-message-form">
-        <form method="POST" action="http://localhost/TeteATete/vue/send_message.php" style="display: flex; width: 100%;">
+        <form method="POST" action="index.php?cible=generique&function=send_message" style="display: flex; width: 100%;">
             <textarea name="message" id="message-input" placeholder="Écrivez votre message..." rows="3" required></textarea>
+            <input type="hidden" name="cible" value="generique">
+            <input type="hidden" name="function" value="send_message">
             <input type="hidden" name="idCours" id="course-id">
             <button type="submit" class="button-36">Envoyer</button>
         </form>

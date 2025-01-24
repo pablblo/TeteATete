@@ -39,7 +39,7 @@
                         <div class="course-info">
                             <p><strong>Statut :</strong> ${course.role || 'Élève'}</p>
                         </div>
-                        <button class="button-36" onclick="window.location.href='index.php?cible=generique&function=messages0?idCours=${course.idCours}'">
+                        <button class="button-36" onclick="window.location.href='index.php?cible=generique&function=messages0&idCours=${course.idCours}'">
                             Ouvrir
                         </button>
                     `;
