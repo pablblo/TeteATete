@@ -17,8 +17,6 @@ function generateUrlFromFilename($input) {
     exit();
 }
 
-
-
 function redirectWithMessage($message, $location) {
     $_SESSION['message'] = $message;
     header("Location: $location");
