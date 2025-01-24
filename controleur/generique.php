@@ -1,4 +1,7 @@
 <?php
+
+include 'modele/connexion.php';
+
 $viewsFolder = 'vue/';
 
 // Initialize variables

@@ -42,12 +42,12 @@
 
         // Charger les messages depuis l'API
         function loadMessages() {
-            fetch(`http://localhost/TeteATete/messages.php?idCours=${courseId}`)
+            fetch(`index.php?cible=generique&function=messages&idCours=${courseId}`)
                 .then(response => response.json())
                 .then(messages => {
+                    console.log(messages);  // Log to see the response
                     const messagesContainer = document.getElementById('messages');
                     messagesContainer.innerHTML = ''; // Réinitialiser la liste des messages
-
                     messages.forEach(msg => {
                         const messageDiv = document.createElement('div');
                         messageDiv.classList.add('message');

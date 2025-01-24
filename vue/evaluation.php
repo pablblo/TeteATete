@@ -52,7 +52,7 @@ try {
                     <h2><?php echo htmlspecialchars($course['Titre']); ?></h2>
                     <p><strong>Date :</strong> <?php echo htmlspecialchars($course['Date']); ?></p>
                     <p><strong>Heure :</strong> <?php echo htmlspecialchars($course['Heure']); ?></p>
-                    <button onclick="window.location.href='index.php?cible=generique&function=submit_evaluation?idCours=<?php echo $course['idCours']; ?>'">
+                    <button onclick="window.location.href='index.php?cible=generique&function=submit_evaluation&idCours=<?php echo $course['idCours']; ?>'">
                         Évaluer ce cours
                     </button>
                 </div>
