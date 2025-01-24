@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Vérification de connexion utilisateur
 if (!isset($_SESSION['user_id'])) {
-    generateUrlFromFilename("Location: login.php");
+    header("Location: index.php?cible=utilisateurs&function=login");
     exit();
 }
 
@@ -17,6 +17,7 @@ if (!isset($_SESSION['user_id'])) {
 $idUser = $_SESSION['user_id'];
 
 try {
+    header('Content-Type: application/json');
     // Requête SQL pour récupérer les cours auxquels l'utilisateur est inscrit
     $sql = "
     SELECT 

@@ -18,5 +18,8 @@ try {
 ini_set('display_errors', 1);  // Enable error display
 error_reporting(E_ALL);        // Report all errors
 
-session_start()
+// Démarrer la session si ce n'est pas déjà fait
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>

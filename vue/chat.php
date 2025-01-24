@@ -27,7 +27,13 @@
                 return response.json();
             })
             .then(courses => {
+                console.log('Courses Data:', courses);
                 const courseList = document.getElementById('course-list');
+
+                // Check if courses is an array
+                if (!Array.isArray(courses)) {
+                    throw new Error('La réponse du serveur n\'est pas un tableau.');
+                }
 
                 // Afficher chaque cours dans une carte
                 courses.forEach(course => {

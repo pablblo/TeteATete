@@ -43,7 +43,7 @@ try {
             $stmt->execute();
 
             // Rediriger vers la page des messages après l'insertion
-            generateUrlFromFilename("Location: messages0.php?idCours=$idCours");
+            generateUrlFromFilename("messages0.php", "idCours=$idCours");
             exit();
         } else {
             die("Paramètres manquants.");
