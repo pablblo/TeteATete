@@ -322,8 +322,10 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-    <div class="container mb-4">
+<div class="container mb-4">
     <form method="GET" action="" class="row g-3">
+        <input type="hidden" name="cible" value="generique">
+        <input type="hidden" name="function" value="page_principale">
         <!-- Barre de recherche -->
         <div class="col-md-6">
             <input type="text" name="search" class="form-control" placeholder="Rechercher un cours par mot-clé ou titre" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
@@ -348,7 +350,6 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="col-md-12 text-end">
             <button type="submit" class="btn btn-secondary">Rechercher</button>
             <a href="index.php?cible=generique&function=page_principale" class="btn btn-primary">Réinitialiser</a>
-
         </div>
     </form>
 </div>
