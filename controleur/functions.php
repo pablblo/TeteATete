@@ -8,10 +8,11 @@ function getRequestParameter($key, $default = "")
     return isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] : $default;
 }
 
-function generateUrlFromFilename($filename, $query) {
+function generateUrlFromFilename($filename, $query = '') {
+    $filename = trim(substr($filename, strpos($filename, ' ') + 1));
     $filename = basename($filename, ".php");
     $baseUrl = "index.php?cible=generique&function=" . $filename;
-    if ($query) {
+    if (!empty($query)) {
         $baseUrl .= '&' . $query;
     }
     header("Location: " . $baseUrl);

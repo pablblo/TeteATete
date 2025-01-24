@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_course'])) {
         $update_places_stmt->execute([$course_id]);
 
         // Rediriger pour recharger la page
-        generateUrlFromFilename("profil_public.php", "id=" . $profile_id);warning
+        generateUrlFromFilename("profil_public.php", "id=" . $profile_id);
         exit();
     } catch (Exception $e) {
         die("Erreur lors de l'inscription : " . $e->getMessage());
