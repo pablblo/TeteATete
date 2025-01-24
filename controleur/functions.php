@@ -12,8 +12,11 @@ function generateUrlFromFilename($input) {
     $filename = trim(substr($input, strpos($input, ' ') + 1));
     $filename = basename($filename, ".php");
     $url = "index.php?cible=generique&function=" . urlencode($filename);
+    if (strpos($input, '?') !== false) {
+        $query = substr($input, strpos($input, '?'));
+        $url .= $query;
+    }
     header("Location: " . $url);
-    $message = $url;
     exit();
 }
 
