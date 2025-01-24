@@ -8,17 +8,21 @@ function getRequestParameter($key, $default = "")
     return isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] : $default;
 }
 
-function generateUrlFromFilename($filename, $query = '') {
-    $filename = trim(substr($filename, strpos($filename, ' ') + 1));
-    $filename = basename($filename, ".php");
-    $baseUrl = "index.php?cible=generique&function=" . $filename;
-    if (!empty($query)) {
-        $baseUrl .= '&' . $query;
+function generateUrlFromFilename($input, $query = '') {
+    if ($query == '') {
+        $input = trim(substr($input, 9));
+        $filename = basename($input, ".php");
+        $baseUrl = "index.php?cible=generique&function=" . $filename;
+    } else {
+        $filename = basename($input, ".php");
+        $baseUrl = "index.php?cible=generique&function=" . $filename;
+        if (!empty($query)) {
+            $baseUrl .= '&' . $query;
+        }
     }
     header("Location: " . $baseUrl);
     exit();
 }
-
 
 function redirectWithMessage($message, $location) {
     $_SESSION['message'] = $message;
