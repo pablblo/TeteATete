@@ -1,14 +1,5 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Configuration de la base de données
-$host = '127.0.0.1'; // Remplacez par votre adresse hôte si nécessaire
-$dbname = 'bdd_tat'; // Nom de votre base de données
-$username = 'root'; // Nom d'utilisateur de la BDD
-$password = ''; // Mot de passe de la BDD
+include 'modele/connexion.php';
 
 // Configurer l'en-tête pour retourner du JSON
 header('Content-Type: application/json');
