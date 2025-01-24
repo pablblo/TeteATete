@@ -22,10 +22,10 @@ $valid_controllers = array_map(function($file) {
 if (isset($_GET['cible']) && !empty($_GET['cible'])) {
     $url = basename($_GET['cible']);  // Strip any directory path elements
     if (!in_array($url, $valid_controllers)) {
-        $url = 'utilisateurs';  // Default fallback if the controller is not valid
+        $url = 'fichiers';  // Default fallback if the controller is not valid
     }
 } else {
-    $url = 'utilisateurs';  // Default value if 'cible' is not set
+    $url = 'fichiers';  // Default value if 'cible' is not set
 }
 
 // Verify the file exists before including

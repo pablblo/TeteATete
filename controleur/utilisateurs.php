@@ -2,7 +2,7 @@
 
 include 'modele/requetes.utilisateurs.php';
 
-$function = getRequestParameter('function', 'loginPage');
+$function = getRequestParameter('function', 'login');
 
 switch ($function) {
     case 'login':
@@ -50,9 +50,9 @@ switch ($function) {
 
                         // Redirection conditionnelle selon le rôle
                         if ($user['Admin'] == 1) {
-                            header("Location: admin.php");
+                            generateUrlFromFilename("Location: admin.php");
                         } else {
-                            header("Location: page_principale.php");
+                            generateUrlFromFilename("Location: page_principale.php");
                         }
                     } else {
                         redirectWithMessage("Erreur : Identifiants incorrects. Veuillez réessayer.", $refreshLocation);

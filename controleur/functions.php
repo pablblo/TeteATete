@@ -8,9 +8,20 @@ function getRequestParameter($key, $default = "")
     return isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] : $default;
 }
 
+function generateUrlFromFilename($input) {
+    $filename = trim(substr($input, strpos($input, ' ') + 1));
+    $filename = basename($filename, ".php");
+    $url = "index.php?cible=generique&function=" . urlencode($filename);
+    header("Location: " . $url);
+    $message = $url;
+    exit();
+}
+
+
+
 function redirectWithMessage($message, $location) {
     $_SESSION['message'] = $message;
-    header("Location: $location");
+    generateUrlFromFilename("Location: $location");
     exit();
 }
 
