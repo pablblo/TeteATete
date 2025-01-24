@@ -177,6 +177,7 @@ $forum_posts = $forum_stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
     <!-- Footer -->
+    <div style="height: 56px;"></div>
     <footer class="bg-light text-center py-3 mt-5 fixed-bottom">
         <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
         <a href="index.php?cible=generique&function=CGU" class="text-decoration-none mx-3 text-dark">
