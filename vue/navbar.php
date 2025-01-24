@@ -74,7 +74,9 @@ $user = $statement->fetch(PDO::FETCH_ASSOC);
 
                 <!-- Section de recherche -->
                 <li class="nav-item d-flex align-items-center ms-3">
-                    <form class="d-flex" action="vue/search_profiles.php" method="GET" style="margin-bottom: 0;">
+                    <form class="d-flex" action="index.php?cible=generique&function=search_profiles" method="GET" style="margin-bottom: 0;">
+                        <input type="hidden" name="cible" value="generique">
+                        <input type="hidden" name="function" value="search_profiles">
                         <input class="form-control me-2" type="search" name="query" placeholder="Rechercher un utilisateur" aria-label="Search" required>
                         <button class="btn btn-outline-primary" type="submit">Rechercher</button>
                     </form>
