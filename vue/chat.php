@@ -19,7 +19,7 @@
         const userId = 1; // Remplacez avec l'idUser connecté
 
         // Récupération des cours de l'utilisateur via l'API
-        fetch(`http://localhost/TeteATete/get_courses.php?idUser=${userId}`)
+        fetch(`index.php?cible=generique&function=get_courses&idUser=${userId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur HTTP : ' + response.status);

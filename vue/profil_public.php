@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register_course'])) {
         $update_places_stmt->execute([$course_id]);
 
         // Rediriger pour recharger la page
-        generateUrlFromFilename("Location: profil_public.php?id=" . $profile_id);
+        generateUrlFromFilename("Location: profil_public.php?id=" . $profile_id);warning
         exit();
     } catch (Exception $e) {
         die("Erreur lors de l'inscription : " . $e->getMessage());
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['unregister_course']))
         $update_places_stmt->execute([$course_id]);
 
         // Rediriger pour recharger la page
-        generateUrlFromFilename("Location: profil_public.php?id=" . $profile_id);
+        generateUrlFromFilename("Location: profil_public.php?id=" . $profile_id);warning
         exit();
     } catch (Exception $e) {
         die("Erreur lors de la désinscription : " . $e->getMessage());
@@ -424,7 +424,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 $eleve_stmt->execute([$course['idCours']]);
                                                 $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach ($eleves as $eleve): ?>
-                                                    <a href="index.php?cible=generique&function=profil_public?id=<?php echo $eleve['idUser']; ?>">
+                                                    <a href="index.php?cible=generique&function=profil_public&id=<?php echo $eleve['idUser']; ?>">
                                                         <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
                                                              class="profile-img-small" 
                                                              alt="Profil Élève"
@@ -444,7 +444,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 $tuteur_stmt->execute([$course['idCours']]);
                                                 $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 foreach ($tuteurs as $tuteur): ?>
-                                                    <a href="index.php?cible=generique&function=profil_public?id=<?php echo $tuteur['idUser']; ?>">
+                                                    <a href="index.php?cible=generique&function=profil_public&id=<?php echo $tuteur['idUser']; ?>">
                                                         <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
                                                              class="profile-img-small" 
                                                              alt="Profil Tuteur"
@@ -510,7 +510,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $eleve_stmt->execute([$course['idCours']]);
                             $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($eleves as $eleve): ?>
-                                <a href="index.php?cible=generique&function=profil_public?id=<?php echo $eleve['idUser']; ?>">
+                                <a href="index.php?cible=generique&function=profil_public&id=<?php echo $eleve['idUser']; ?>">
                                     <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
                                          class="profile-img-small" 
                                          alt="Profil Élève"
@@ -530,7 +530,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $tuteur_stmt->execute([$course['idCours']]);
                             $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($tuteurs as $tuteur): ?>
-                                <a href="index.php?cible=generique&function=profil_public?id=<?php echo $tuteur['idUser']; ?>">
+                                <a href="index.php?cible=generique&function=profil_public&id=<?php echo $tuteur['idUser']; ?>">
                                     <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
                                          class="profile-img-small" 
                                          alt="Profil Tuteur"
@@ -551,7 +551,6 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-    <div style="height: 56px;"></div>
     <footer class="bg-light text-center py-3 mt-5 fixed-bottom">
         <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
         <a href="index.php?cible=generique&function=CGU" class="text-decoration-none mx-3 text-dark">

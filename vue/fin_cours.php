@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <h2>Évaluer les participants</h2>
-<form action="evaluer.php?idCours=<?php echo $idCours; ?>" method="POST">
+<form action="index.php?cible=generique&function=evaluation&idCours=<?php echo $idCours; ?>" method="POST">
     <?php foreach ($participants as $participant): ?>
         <?php if ($participant['idUser'] != $user_id): // Empêcher l'auto-évaluation ?>
             <h3><?php echo htmlspecialchars($participant['Prenom']) . ' ' . htmlspecialchars($participant['Nom']); ?></h3>

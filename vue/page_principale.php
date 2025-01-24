@@ -386,7 +386,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $eleve_stmt->execute([$course['idCours']]);
                             $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($eleves as $eleve): ?>
-                                <a href="index.php?cible=generique&function=profil_public?id=<?php echo $eleve['idUser']; ?>" title="Voir le profil">
+                                <a href="index.php?cible=generique&function=profil_public&id=<?php echo $eleve['idUser']; ?>" title="Voir le profil">
                                     <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
                                          class="profile-img" 
                                          alt="Profil Élève">
@@ -414,7 +414,7 @@ $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $tuteur_stmt->execute([$course['idCours']]);
                             $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($tuteurs as $tuteur): ?>
-                                <a href="index.php?cible=generique&function=profil_public?id=<?php echo $tuteur['idUser']; ?>" title="Voir le profil">
+                                <a href="index.php?cible=generique&function=profil_public&id=<?php echo $tuteur['idUser']; ?>" title="Voir le profil">
                                     <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
                                          class="profile-img" 
                                          alt="Profil Tuteur">

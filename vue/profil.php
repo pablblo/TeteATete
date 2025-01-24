@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                 $eleve_stmt->execute([$course['idCours']]);
                                 $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($eleves as $eleve): ?>
-                                    <a href="index.php?cible=generique&function=profil_public?id=<?php echo $eleve['idUser']; ?>">
+                                    <a href="index.php?cible=generique&function=profil_public&id=<?php echo $eleve['idUser']; ?>">
                                         <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
                                              class="profile-img-small" 
                                              alt="Profil Élève"
@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                                 $tuteur_stmt->execute([$course['idCours']]);
                                 $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($tuteurs as $tuteur): ?>
-                                    <a href="index.php?cible=generique&function=profil_public?id=<?php echo $tuteur['idUser']; ?>">
+                                    <a href="index.php?cible=generique&function=profil_public&id=<?php echo $tuteur['idUser']; ?>">
                                         <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
                                              class="profile-img-small" 
                                              alt="Profil Tuteur"
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             $eleve_stmt->execute([$course['idCours']]);
                             $eleves = $eleve_stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($eleves as $eleve): ?>
-                                <a href="index.php?cible=generique&function=profil_public?id=<?php echo $eleve['idUser']; ?>">
+                                <a href="index.php?cible=generique&function=profil_public&id=<?php echo $eleve['idUser']; ?>">
                                     <img src="data:image/jpeg;base64,<?php echo base64_encode($eleve['Photo_de_Profil']); ?>" 
                                          class="profile-img-small" 
                                          alt="Profil Élève"
@@ -266,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                             $tuteur_stmt->execute([$course['idCours']]);
                             $tuteurs = $tuteur_stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($tuteurs as $tuteur): ?>
-                                <a href="index.php?cible=generique&function=profil_public?id=<?php echo $tuteur['idUser']; ?>">
+                                <a href="index.php?cible=generique&function=profil_public&id=<?php echo $tuteur['idUser']; ?>">
                                     <img src="data:image/jpeg;base64,<?php echo base64_encode($tuteur['Photo_de_Profil']); ?>" 
                                          class="profile-img-small" 
                                          alt="Profil Tuteur"

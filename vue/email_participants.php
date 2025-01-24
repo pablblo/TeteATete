@@ -46,7 +46,7 @@ function envoyerEmailParticipants($idCours, $titreCours) {
                 Le cours « $titreCours » auquel vous avez participé est maintenant terminé.
 
                 Nous vous invitons à évaluer le tuteur en donnant une note sur 5 et un commentaire :
-                [Cliquez ici pour évaluer le tuteur](http://localhost/APP2/evaluer.php?idCours=$idCours).
+                [Cliquez ici pour évaluer le tuteur](http://localhost/TeteATete/index.php?cible=generique&function=evaluation&idCours=$idCours).
 
                 Merci pour votre participation !
 

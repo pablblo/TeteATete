@@ -77,7 +77,7 @@
 
         // Charger les messages initialement
         loadMessages();
-        fetch(`http://localhost/TeteATete/course_name.php?idCours=${courseId}`)
+        fetch(`index.php?cible=generique&function=course_name&idCours=${courseId}`)
     .then(response => response.json())
     .then(data => {
         if (data && data.Titre) {
