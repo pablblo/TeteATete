@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'], $_POST['que
     if (!empty($answer)) {
         $stmt = $db->prepare("UPDATE Forum SET answer = ? WHERE id = ?");
         $stmt->execute([$answer, $question_id]);
-        generateUrlFromFilename("Location: " . $_SERVER['PHP_SELF']); // Rafraîchir la page
+        generateUrlFromFilename("Location: FAQ.php"); // Rafraîchir la page
         exit();
     }
 }
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question'])) {
     if (!empty($question)) {
         $stmt = $db->prepare("INSERT INTO Forum (user_id, question) VALUES (?, ?)");
         $stmt->execute([$user_id, $question]);
-        generateUrlFromFilename("Location: " . $_SERVER['PHP_SELF']); // Rafraîchir la page
+        generateUrlFromFilename("Location: FAQ.php"); // Rafraîchir la page
         exit();
     }
 }
