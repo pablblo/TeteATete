@@ -29,5 +29,4 @@ if (in_array($function, $availableViews)) {
 }
 
 include ('vue/' . $vue . '.php');
-include ('vue/footer.php');
 ?>
