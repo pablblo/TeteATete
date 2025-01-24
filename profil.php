@@ -91,6 +91,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             echo json_encode(['success' => false, 'message' => 'Erreur : ' . $e->getMessage()]);
         }
         exit();
+    } elseif ($action === 'reset_photo') {
+        try {
+            // Réinitialiser la photo de profil en la mettant à NULL
+            $reset_query = $db->prepare("UPDATE User SET Photo_de_Profil = NULL WHERE idUser = ?");
+            $reset_query->execute([$user_id]);
+
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true]);
+        } catch (Exception $e) {
+            echo json_encode(['success' => false, 'message' => 'Erreur : ' . $e->getMessage()]);
+        }
+        exit();
     }
 }
 
@@ -300,6 +312,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     <div class="mb-3">
                         <label for="edit-photo" class="form-label">Photo de profil :</label>
                         <input type="file" id="edit-photo" name="photo_de_profil" class="form-control">
+                        <!-- Bouton de réinitialisation de la photo de profil -->
+                        <button type="button" id="reset-photo-btn" class="btn btn-secondary mt-2">Réinitialiser la photo de profil</button>
                     </div>
                 </form>
             </div>
@@ -343,6 +357,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         })
         .catch(error => console.error('Erreur :', error));
     }
+
+    // Fonction pour réinitialiser la photo de profil
+    document.getElementById('reset-photo-btn').addEventListener('click', () => {
+        if (confirm('Êtes-vous sûr de vouloir réinitialiser votre photo de profil ?')) {
+            fetch('profil.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    action: 'reset_photo'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Photo de profil réinitialisée avec succès !');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Une erreur est survenue.');
+                }
+            })
+            .catch(error => console.error('Erreur :', error));
+        }
+    });
 </script>
 
 

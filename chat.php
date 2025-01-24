@@ -8,12 +8,12 @@
 </head>
 <body>
     <?php include 'navbar.php'; ?>
-
-    <h1>Vos Discussion</h1>
-    <p class="description">Voici les groupes auxquels vous participez.<br> Cliquez sur un groupe pour accéder aux discussions et interagir avec vos collègues.</p>
-    <br>
-    <div class="container" id="course-list"></div>
-
+    <main>
+        <h1>Vos Discussion</h1>
+        <p class="description">Voici les groupes auxquels vous participez.<br> Cliquez sur un groupe pour accéder aux discussions et interagir avec vos collègues.</p>
+        <br>
+        <div class="container" id="course-list"></div>
+    </main>
     <script>
         // ID utilisateur (à remplacer dynamiquement selon votre application)
         const userId = 1; // Remplacez avec l'idUser connecté
@@ -53,5 +53,16 @@
             });
     </script>
     
+     <!-- Footer -->
+     <footer class="bg-light text-center py-3 mt-5">
+        <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
+        <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
+            Conditions générales d'utilisation
+        </a>
+        |
+        <a href="mentionslegales.php" class="text-decoration-none mx-3 text-dark">
+            Mentions légales
+        </a>
+    </footer>
 </body>
 </html>

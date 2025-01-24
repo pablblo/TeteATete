@@ -35,25 +35,25 @@ $user = $query->fetch(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style/style_mentionslegales.css">
 </head>
 <body>
-    
-<!-- Section iframe pour afficher le PDF -->
-<div class="profile-container">
-    <iframe src="documents/MLTAT.pdf" width="100%" height="600px"></iframe>
-</div>
+    <div class="container">
+        <!-- Section iframe pour afficher le PDF -->
+        <div class="profile-container">
+            <iframe src="documents/MLTAT.pdf" width="100%" height="600px"></iframe>
+        </div>
 
-<!-- Footer -->
-<footer class="bg-light text-center py-3 mt-5">
-        <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
-        <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
-            Conditions générales d'utilisation
-        </a>
-        |
-        <a href="mentionslegales.php" class="text-decoration-none mx-3 text-dark">
-            Mentions légales
-        </a>
-    </footer>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Footer -->
+        <footer class="bg-light text-center py-3 mt-5">
+            <a class="text-decoration-none mx-3 text-dark">© 2024 Tete A Tete. Tous droits réservés.</a>
+            <a href="CGU.php" class="text-decoration-none mx-3 text-dark">
+                Conditions générales d'utilisation
+            </a>
+            |
+            <a href="mentionslegales.php" class="text-decoration-none mx-3 text-dark">
+                Mentions légales
+            </a>
+        </footer>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

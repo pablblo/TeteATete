@@ -79,7 +79,7 @@ $forum_posts = $forum_stmt->fetchAll(PDO::FETCH_ASSOC);
             <h1>Qui sommes-nous ?</h1>
             <h2>InnoWave</h2>
             <p>
-                Cette plateforme facilite l'accès aux cours en ligne et aux services de tutorat. Elle permet aux étudiants de suivre des formations supplémentaires, d’obtenir de l’aide personnalisée et d’organiser des séances de tutorat flexibles. Nous visons à améliorer la performance académique des étudiants en favorisant l'entraide pédagogique.
+                InnoWave facilite l'accès aux cours en ligne et aux services de tutorat, aidant les étudiants à améliorer leurs performances académiques grâce à l'entraide pédagogique.
             </p>
         </div>
         <img src="images/APPlogo.png" alt="Logo InnoWave">
@@ -87,89 +87,93 @@ $forum_posts = $forum_stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Section FAQ -->
     <section class="faq">
-        <h2>FAQ</h2>
-        <div class="faq-item">
-            <h3>Politique d'annulation</h3>
-            <h4>Que se passe-t-il si je dois annuler une séance ?</h4>
-            <p>Vous pouvez annuler une séance au moins 24 heures à l'avance via votre espace personnel. Consultez notre politique d'annulation pour les détails.</p>
-        </div>
-        <div class="faq-item">
-            <h3>Assistance technique</h3>
-            <h4>Qui contacter en cas de problème technique ?</h4>
-            <p>Contactez le support technique à teteatete.innowave@gmail.com ou utilisez le formulaire de contact.</p>
-        </div>
-        <div class="faq-item">
-            <h3>Modification du profil</h3>
-            <h4>Comment changer mes informations personnelles ?</h4>
-            <p>Accédez à la section "Profil", cliquez sur "Modifier" pour mettre à jour vos informations.</p>
-        </div>
-        <div class="faq-item">
-            <h3>Réservation</h3>
-            <h4>Comment réserver un cours ?</h4>
-            <p>Allez dans la section "Cours", sélectionnez un cours et cliquez sur "Réserver".</p>
-        </div>
-        <div class="faq-item">
-            <h3>Évaluation</h3>
-            <h4>Comment évaluer un tuteur ou un élève ?</h4>
-            <p>Après la séance, accédez à la page du cours pour laisser une évaluation.</p>
+        <div class="container"> <!-- Ajout de la classe container -->
+            <h2>FAQ</h2>
+            <div class="faq-item">
+                <h3>Politique d'annulation</h3>
+                <h4>Que se passe-t-il si je dois annuler une séance ?</h4>
+                <p>Vous pouvez annuler une séance au moins 24 heures à l'avance via votre espace personnel.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Assistance technique</h3>
+                <h4>Qui contacter en cas de problème technique ?</h4>
+                <p>Contactez le support technique à teteatete.innowave@gmail.com.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Modification du profil</h3>
+                <h4>Comment changer mes informations personnelles ?</h4>
+                <p>Accédez à la section "Profil", cliquez sur "Modifier" pour mettre à jour vos informations.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Réservation</h3>
+                <h4>Comment réserver un cours ?</h4>
+                <p>Allez dans la section "Cours", sélectionnez un cours et cliquez sur "Réserver".</p>
+            </div>
+            <div class="faq-item">
+                <h3>Évaluation</h3>
+                <h4>Comment évaluer un tuteur ou un élève ?</h4>
+                <p>Après la séance, accédez à la page du cours pour laisser une évaluation.</p>
+            </div>
         </div>
     </section>
     <section id="forum" class="bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">Forum de discussion</h2>
+        <div class="container">
+            <h2 class="text-center mb-4">Forum de discussion</h2>
 
-        <!-- Formulaire pour poser une question -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form method="POST" action="">
-                    <div class="mb-3">
-                        <label for="question" class="form-label">Posez votre question :</label>
-                        <textarea id="question" name="question" class="form-control" rows="3" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Envoyer</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Liste des questions et réponses -->
-        
-</section>
-<div class="forum-questions">
-    <?php if (!empty($forum_posts)): ?>
-        <?php foreach ($forum_posts as $post): ?>
+            <!-- Formulaire pour poser une question -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">
-                        Question de <?php echo htmlspecialchars($post['Prenom'] . ' ' . $post['Nom']); ?> 
-                        <span class="text-muted" style="font-size: 0.8rem;">(<?php echo $post['created_at']; ?>)</span>
-                    </h5>
-                    <p class="card-text"><?php echo nl2br(htmlspecialchars($post['question'])); ?></p>
-
-                    <!-- Affichage de la réponse -->
-                    <?php if (!empty($post['answer'])): ?>
-                        <div class="mt-3 p-3 bg-light border rounded">
-                            <strong>Réponse de l'administrateur :</strong>
-                            <p><?php echo nl2br(htmlspecialchars($post['answer'])); ?></p>
+                    <form method="POST" action="">
+                        <div class="mb-3">
+                            <label for="question" class="form-label">Posez votre question :</label>
+                            <textarea id="question" name="question" class="form-control" rows="3" required></textarea>
                         </div>
-                    <?php elseif ($isAdmin): ?>
-                        <!-- Formulaire de réponse pour les administrateurs -->
-                        <form method="POST" action="" class="mt-3">
-                            <input type="hidden" name="question_id" value="<?php echo $post['id']; ?>">
-                            <div class="mb-3">
-                                <textarea name="answer" class="form-control" rows="3" placeholder="Répondre à cette question..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-success">Envoyer la réponse</button>
-                        </form>
-                    <?php else: ?>
-                        <p class="text-muted">En attente de réponse...</p>
-                    <?php endif; ?>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </form>
                 </div>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p class="text-center text-muted">Aucune question pour le moment. Posez-en une ci-dessus !</p>
-    <?php endif; ?>
-</div>
+
+            <!-- Liste des questions et réponses -->
+            
+    </section>
+    <div class="forum-questions">
+        <?php if (!empty($forum_posts)): ?>
+            <?php foreach ($forum_posts as $post): ?>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Question de <?php echo htmlspecialchars($post['Prenom'] . ' ' . $post['Nom']); ?> 
+                            <span class="text-muted" style="font-size: 0.8rem;">(<?php echo $post['created_at']; ?>)</span>
+                        </h5>
+                        <p class="card-text">
+                            <?php echo strlen($post['question']) > 150 ? substr(htmlspecialchars($post['question']), 0, 150) . '...' : nl2br(htmlspecialchars($post['question'])); ?>
+                        </p>
+
+                        <!-- Affichage de la réponse -->
+                        <?php if (!empty($post['answer'])): ?>
+                            <div class="mt-3 p-3 bg-light border rounded">
+                                <strong>Réponse de l'administrateur :</strong>
+                                <p><?php echo nl2br(htmlspecialchars($post['answer'])); ?></p>
+                            </div>
+                        <?php elseif ($isAdmin): ?>
+                            <!-- Formulaire de réponse pour les administrateurs -->
+                            <form method="POST" action="" class="mt-3">
+                                <input type="hidden" name="question_id" value="<?php echo $post['id']; ?>">
+                                <div class="mb-3">
+                                    <textarea name="answer" class="form-control" rows="3" placeholder="Répondre à cette question..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Envoyer la réponse</button>
+                            </form>
+                        <?php else: ?>
+                            <p class="text-muted">En attente de réponse...</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="text-center text-muted">Aucune question pour le moment. Posez-en une ci-dessus !</p>
+        <?php endif; ?>
+    </div>
 
 
     <!-- Footer -->
