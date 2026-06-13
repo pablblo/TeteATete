@@ -93,4 +93,38 @@ function validerRecaptcha($recaptchaResponse, $secretKey) {
 
     return $resultJson->success ?? false;
 }
+
+function apiLogin(string $email, string $password): ?string
+{
+    if (!apiEnabled()) {
+        return null;
+    }
+
+    $payload = json_encode(['email' => $email, 'password' => $password]);
+    $context = stream_context_create([
+        'http' => [
+            'header' => "Content-Type: application/json\r\n",
+            'method' => 'POST',
+            'content' => $payload,
+            'ignore_errors' => true,
+        ],
+    ]);
+
+    $response = @file_get_contents(apiBaseUrl() . '/api/auth/login', false, $context);
+    if ($response === false) {
+        return null;
+    }
+
+    $data = json_decode($response, true);
+    return $data['token'] ?? null;
+}
+
+function apiAuthHeaders(): array
+{
+    if (empty($_SESSION['api_token'])) {
+        return [];
+    }
+
+    return ['Authorization: Bearer ' . $_SESSION['api_token']];
+}
 ?>

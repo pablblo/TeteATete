@@ -26,6 +26,24 @@ try {
 
 require_once __DIR__ . '/controleur/functions.php';
 
+$apiConfig = require __DIR__ . '/config/api.php';
+
+function apiConfig(): array
+{
+    global $apiConfig;
+    return $apiConfig;
+}
+
+function apiEnabled(): bool
+{
+    return !empty(apiConfig()['enabled']);
+}
+
+function apiBaseUrl(): string
+{
+    return rtrim(apiConfig()['base_url'], '/');
+}
+
 function requireAuth(): void
 {
     if (!isset($_SESSION['user_id'])) {

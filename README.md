@@ -41,10 +41,29 @@ PlatTutEntreEleves/
 
 ## Technologies
 
-- PHP, MySQL (PDO)
+- PHP, MySQL (PDO) — frontend MVC
+- **Java 21, Spring Boot 3.4** — REST API (`backend/`)
 - HTML, CSS, JavaScript
 - Bootstrap 5
 - PHPMailer (Composer)
+
+## Spring Boot backend
+
+The Java API lives in `backend/` and shares the same MySQL database.
+
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+Enable PHP → Spring integration in `config/api.php`:
+
+```php
+'enabled' => true,
+'base_url' => 'http://localhost:8080',
+```
+
+See `backend/README.md` for endpoints and JWT authentication.
 
 ## Configuration
 

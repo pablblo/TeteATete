@@ -15,10 +15,16 @@
         <div class="container" id="course-list"></div>
     </main>
     <script>
-        // ID utilisateur (à remplacer dynamiquement selon votre application)
         const userId = <?php echo $userId; ?>;
+        const coursesUrl = <?php echo json_encode($coursesUrl); ?>;
+        const apiToken = <?php echo json_encode($apiToken); ?>;
+        const useSpringApi = <?php echo $useSpringApi ? 'true' : 'false'; ?>;
 
-        fetch(`actions/get_courses.php?idUser=${userId}`)
+        const fetchOptions = useSpringApi && apiToken
+            ? { headers: { 'Authorization': 'Bearer ' + apiToken } }
+            : {};
+
+        fetch(coursesUrl, fetchOptions)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erreur HTTP : ' + response.status);

@@ -74,6 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['username'] = $user['Nom'];
         $_SESSION['Admin'] = $user['Admin']; // Stocker le rôle Admin
 
+        if ($token = apiLogin($email, $password)) {
+            $_SESSION['api_token'] = $token;
+        }
+
         // Redirection conditionnelle selon le rôle
         if ($user['Admin'] == 1) { // Si administrateur
             header("Location: admin.php");

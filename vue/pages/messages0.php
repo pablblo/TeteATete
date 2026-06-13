@@ -17,7 +17,7 @@
     <div id="messages"></div>
 
     <div id="send-message-form">
-        <form method="POST" action="actions/send_message.php" style="display: flex; width: 100%;">
+        <form id="message-form" method="POST" action="<?php echo htmlspecialchars($sendMessageUrl); ?>" style="display: flex; width: 100%;">
             <textarea name="message" id="message-input" placeholder="Écrivez votre message..." rows="3" required></textarea>
             <input type="hidden" name="idCours" id="course-id">
             <button type="submit" class="button-36">Envoyer</button>
@@ -25,22 +25,52 @@
     </div>
 
     <script>
-        // Récupérer l'idCours depuis l'URL
         const urlParams = new URLSearchParams(window.location.search);
         const courseId = urlParams.get('idCours');
+        const messagesUrlTemplate = <?php echo json_encode($messagesUrlTemplate); ?>;
+        const courseTitleUrlTemplate = <?php echo json_encode($courseTitleUrlTemplate); ?>;
+        const sendMessageUrl = <?php echo json_encode($sendMessageUrl); ?>;
+        const apiToken = <?php echo json_encode($apiToken); ?>;
+        const useSpringApi = <?php echo $useSpringApi ? 'true' : 'false'; ?>;
 
-        // Vérifier si idCours est présent
+        const authHeaders = useSpringApi && apiToken
+            ? { 'Authorization': 'Bearer ' + apiToken }
+            : {};
+
         if (!courseId) {
             alert("Aucun cours sélectionné !");
-            window.location.href = "chat.html"; // Redirection vers la liste des cours
+            window.location.href = "chat.php";
         }
 
-        // Insérer l'idCours dans le champ caché du formulaire
         document.getElementById('course-id').value = courseId;
 
-        // Charger les messages depuis l'API
+        document.getElementById('message-form').addEventListener('submit', function (event) {
+            if (!useSpringApi) {
+                return;
+            }
+
+            event.preventDefault();
+            const message = document.getElementById('message-input').value.trim();
+            fetch(sendMessageUrl, {
+                method: 'POST',
+                headers: {
+                    ...authHeaders,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ idCours: Number(courseId), message })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur HTTP : ' + response.status);
+                    }
+                    document.getElementById('message-input').value = '';
+                    loadMessages();
+                })
+                .catch(error => console.error('Erreur lors de l\'envoi du message :', error));
+        });
+
         function loadMessages() {
-            fetch(`messages.php?idCours=${courseId}`)
+            fetch(`${messagesUrlTemplate}${courseId}`, { headers: authHeaders })
                 .then(response => response.json())
                 .then(messages => {
                     const messagesContainer = document.getElementById('messages');
@@ -75,7 +105,10 @@
 
         // Charger les messages initialement
         loadMessages();
-        fetch(`actions/course_name.php?idCours=${courseId}`)
+        const titleUrl = useSpringApi
+            ? `${courseTitleUrlTemplate}${courseId}/title`
+            : `${courseTitleUrlTemplate}${courseId}`;
+        fetch(titleUrl, { headers: authHeaders })
     .then(response => response.json())
     .then(data => {
         if (data && data.Titre) {
