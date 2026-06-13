@@ -1,6 +1,6 @@
 <?php
-require 'vendor/autoload.php'; // Charge PHPMailer via Composer
-require 'db_connection.php'; // Connexion à la base de données
+require_once __DIR__ . '/../bootstrap.php'; // Charge PHPMailer via Composer
+require_once __DIR__ . '/../bootstrap.php'; // Connexion à la base de données
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tête à Tête - Connexion</title>
+    <link rel="stylesheet" href="style/style.css">
+    <style>
+        .error-message {
+            color: red; /* Couleur rouge pour le message d'erreur */
+            font-weight: bold; /* Mettre en gras le texte */
+            margin-bottom: 10px; /* Espace sous le message d'erreur */
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header-container">
+            <img src="images/logo.png" alt="Logo Tête à Tête" class="logo">
+            <h1>Tête à Tête</h1>
+            <p>L'application d'entraides</p>
+        </div>
+
+        <div class="login-container">
+            <div class="form-container">
+                <?php if ($error_message): ?>
+                    <div class="error-message"><?php echo htmlspecialchars($error_message); ?></div>
+                <?php endif; ?>
+
+                <form action="login.php" method="POST">
+                    <input type="email" placeholder="Mail" id="email" name="email" required>
+                    <input type="password" placeholder="Mot de passe" id="password" name="password" required>
+                    <br>
+                    <br>
+                    
+                    <div class="g-recaptcha" data-sitekey="6Lc9KrMqAAAAAPSGlsM294Va-fL6FUhavCjtPpPC"></div>
+                    <br>
+
+                    <button type="submit">Se Connecter</button>
+                    <div class="links">
+                        <a href="reset_password.php">Mot de passe oublié</a>
+                        <p></p>
+                        <a href="register.php">Inscription</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="height: 125px"></div>
+    </div>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</body>
+</html>

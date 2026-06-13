@@ -1,6 +1,6 @@
 <?php
 // Inclusion du fichier de connexion à la base de données
-require 'db_connection.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 // Démarrer la session
 

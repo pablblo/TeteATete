@@ -1,6 +1,6 @@
 <?php
 // Inclusion de la connexion à la base de données
-require 'db_connection.php';
+require_once __DIR__ . '/../bootstrap.php';
 session_start();
 
 // Vérification de connexion administrateur

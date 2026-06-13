@@ -1,5 +1,5 @@
 <?php
-require 'db_connection.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 // Vérification des paramètres POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idInscription'])) {

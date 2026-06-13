@@ -1,6 +1,6 @@
 <?php
 
-require 'db_connection.php'; // Connexion à la base de données
+require_once __DIR__ . '/../bootstrap.php'; // Connexion à la base de données
 
 $userId = $_GET['idUser']; // L'ID de l'utilisateur, par exemple, passé dans l'URL
 

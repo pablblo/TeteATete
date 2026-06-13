@@ -1,5 +1,5 @@
 <?php
-require 'db_connection.php'; // Connexion à la base de données
+require_once __DIR__ . '/../bootstrap.php'; // Connexion à la base de données
 
 header('Content-Type: application/json'); // Réponse JSON
 

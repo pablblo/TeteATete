@@ -1,6 +1,5 @@
 <?php
-require 'db_connection.php';
-require 'vendor/autoload.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

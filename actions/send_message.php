@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require 'db_connection.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 try {
     // Vérifier si l'utilisateur est connecté

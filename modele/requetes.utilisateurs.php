@@ -1,7 +1,5 @@
 <?php
-include 'connexion.php';
-
-$table = "user";
+include __DIR__ . '/connexion.php';
 
 /**
  * Recherche un utilisateur en fonction du nom passé en paramètre
@@ -10,7 +8,7 @@ $table = "user";
  * @return array
  */
 function rechercheParMail(PDO $db, string $mail): array {
-    $statement = $db->prepare('SELECT * FROM  user WHERE mail = :mail');
+    $statement = $db->prepare('SELECT * FROM User WHERE Mail = :mail');
     $statement->bindParam(":mail", $mail);
     $statement->execute();
     $result = $statement->fetch(PDO::FETCH_ASSOC);
@@ -23,7 +21,7 @@ function rechercheParMail(PDO $db, string $mail): array {
  * @return array
  */
 function recupereTousUtilisateurs(PDO $db): array {
-    $query = 'SELECT * FROM user';
+    $query = 'SELECT * FROM User';
     return $db->query($query)->fetchAll(PDO::FETCH_ASSOC);
 }
 

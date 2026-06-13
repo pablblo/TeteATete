@@ -1,27 +1,10 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;// Inclure la bibliothèque PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require 'vendor/autoload.php'; // Charger PHPMailer via Composer
 
 function getRequestParameter($key, $default = "")
 {
     return isset($_GET[$key]) && !empty($_GET[$key]) ? $_GET[$key] : $default;
-}
-
-function generateUrlFromFilename($input, $query = '') {
-    if ($query == '') {
-        $input = trim(substr($input, 9));
-        $filename = basename($input, ".php");
-        $baseUrl = "index.php?cible=generique&function=" . $filename;
-    } else {
-        $filename = basename($input, ".php");
-        $baseUrl = "index.php?cible=generique&function=" . $filename;
-        if (!empty($query)) {
-            $baseUrl .= '&' . $query;
-        }
-    }
-    header("Location: " . $baseUrl);
-    exit();
 }
 
 function redirectWithMessage($message, $location) {
@@ -44,16 +27,6 @@ function getMessage() {
         return $message;
     }
     return null;
-}
-
-function recupereTousFichiers(): array {
-    $directory = __DIR__.'/../';
-    $fichiers = scandir($directory);
-    $fichiers = array_diff($fichiers, ['.', '..']);
-    $fichiers = array_filter($fichiers, function ($file) {
-        return (pathinfo($file, PATHINFO_EXTENSION) === 'php' || pathinfo($file, PATHINFO_EXTENSION) === 'html');
-    });
-    return array_values($fichiers);
 }
 
 function mdpResetEmail($db, $email) {

@@ -1,6 +1,6 @@
 <?php
 // Connexion à la base de données
-require 'db_connection.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 if (!isset($_GET['idCours'])) {
     echo json_encode(['error' => 'idCours est requis']);
